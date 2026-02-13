@@ -586,12 +586,21 @@ const monthSelect = document.getElementById('month');
 const plantSelect = document.getElementById('plant');
 const output = document.getElementById('output');
 
-// Remplir le select plantes
-plantes.forEach(p => {
-    const option = document.createElement('option');
-    option.value = p.nom;
-    option.textContent = p.nom;
-    plantSelect.appendChild(option);
+// Remplir le select plantes par type puis par nom
+const types = [...new Set(plantes.map(p => p.type))].sort((a, b) => a.localeCompare(b));
+types.forEach(type => {
+    const group = document.createElement('optgroup');
+    group.label = type.charAt(0).toUpperCase() + type.slice(1);
+    plantes
+        .filter(p => p.type === type)
+        .sort((a, b) => a.nom.localeCompare(b.nom))
+        .forEach(p => {
+            const option = document.createElement('option');
+            option.value = p.nom;
+            option.textContent = p.nom;
+            group.appendChild(option);
+        });
+    plantSelect.appendChild(group);
 });
 
 // Gestion de l'affichage
