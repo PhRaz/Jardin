@@ -623,17 +623,27 @@ plantSelect.addEventListener('change', showPlant);
 // Fonctions
 function showMonth() {
     const mois = parseInt(monthSelect.value);
-    let html = `<h2>Opérations pour ${moisFR[mois - 1]}</h2><table class="table table-striped table-hover"><thead><tr><th>Plante</th><th>Opération</th><th>Détails</th></tr></thead><tbody>`;
-    // Trier les plantes par nom
-    plantes.sort((a, b) => a.nom.localeCompare(b.nom));
-    plantes.forEach(p => {
-        // filtrer les opérations pour ce mois
-        const ops = p.entretien.filter(op => op.mois === mois);
-        ops.forEach(op => {
-            html += `<tr><td>${p.nom}</td><td>${op.operation}</td><td class="details">${op.details}</td></tr>`;
+    let html = `<h2>Opérations pour ${moisFR[mois - 1]}</h2>`;
+    // Grouper par type, puis trier par nom dans chaque type
+    const typesAvecOps = [...new Set(plantes.map(p => p.type))].sort((a, b) => a.localeCompare(b));
+    typesAvecOps.forEach(type => {
+        const plantesType = plantes
+            .filter(p => p.type === type)
+            .sort((a, b) => a.nom.localeCompare(b.nom));
+        const rows = [];
+        plantesType.forEach(p => {
+            const ops = p.entretien.filter(op => op.mois === mois);
+            ops.forEach(op => {
+                rows.push(`<tr><td>${p.nom}</td><td>${op.operation}</td><td class="details">${op.details}</td></tr>`);
+            });
         });
+        if (rows.length > 0) {
+            html += `<h5 class="mt-3">${type.charAt(0).toUpperCase() + type.slice(1)}</h5>`;
+            html += `<table class="table table-striped table-hover"><thead><tr><th>Plante</th><th>Opération</th><th>Détails</th></tr></thead><tbody>`;
+            html += rows.join('');
+            html += '</tbody></table>';
+        }
     });
-    html += '</tbody></table>';
     output.innerHTML = html;
 }
 
