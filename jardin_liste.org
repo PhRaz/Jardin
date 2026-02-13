@@ -1,0 +1,83 @@
+
+
+Voici une liste de plantes (arbres, légumes, fleurs ...)
+
+Peux tu faire un fichier json qui liste toutes ces plantes avec les informations suivantes :
+- nom complet
+- type ou genre (arbre fruitier, légume ...)
+- liste des opérations d'entretien (plantage, semis, taille, récolte, engrais
+  ...) avec la date idéale de l'opération pour cette plante
+
+A partir de ce fichier je voudrais développer une application en javascript dans
+une page web qui permet de visualiser ces informations dans les formats suivant :
+- calendrier des opérations à faire pour un mois donné
+- calendrier des opérations à faire pour une plante donnée
+
+Liste de plantes : 
+
+cerisier
+meurisier
+cognassier
+pêcher (pêche de vigne)
+prunier mirabelle
+prunier prune rouge
+prunier reine claude
+noisettier
+noyer
+tamaris
+
+fraisier
+framboisier remontant
+groseiller
+vigne
+rhubarbe
+artichaut
+
+oseille
+menthe
+thym
+romarin
+persil
+coriandre
+
+rosier
+laurier rose
+muguet
+fusain
+oranger du mexique
+fushia
+geranium vivace
+arbre à papillon noir
+clématite
+olivier
+hortensia
+sauge arbustive
+oeillet d'inde
+coquelicot
+perce neige
+lavande
+camélia
+pivoines
+iris d'alger
+croix de jerusalem
+azalée
+chevrefeuille
+giroflée
+
+pomme de terre
+haricot vert
+courgettes
+betteraves
+tomates
+aubergines
+poivrons
+butternut
+mache
+mesclun
+petit pois d'hiver
+ail
+echalotte radis
+basilic
+
+
+
