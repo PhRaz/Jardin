@@ -638,6 +638,35 @@ const plantes = [
 // Clé API Perenual
 const PERENUAL_API_KEY = 'sk-cfrx699048370f31d14827';
 
+// Traductions anglais → français pour les valeurs de l'API
+const traductions = {
+    // Arrosage
+    "Frequent": "Fréquent", "Average": "Moyen", "Minimum": "Minimum", "None": "Aucun",
+    // Ensoleillement
+    "Full sun": "Plein soleil", "full sun": "Plein soleil",
+    "Part shade": "Mi-ombre", "part shade": "Mi-ombre",
+    "Part sun/part shade": "Soleil partiel / mi-ombre",
+    "Filtered shade": "Ombre filtrée", "Full shade": "Ombre totale",
+    "Deep shade": "Ombre profonde", "Sheltered": "Abrité",
+    "Sun": "Soleil", "sun": "Soleil",
+    // Cycle
+    "Perennial": "Vivace", "Annual": "Annuelle", "Biennial": "Bisannuelle",
+    "Biannual": "Bisannuelle",
+    // Entretien
+    "Low": "Faible", "Moderate": "Modéré", "High": "Élevé",
+    // Divers
+    "Yes": "Oui", "No": "Non",
+    "Hardy": "Rustique", "Tender": "Fragile",
+    "Evergreen": "Persistant", "Deciduous": "Caduc", "Semi-evergreen": "Semi-persistant"
+};
+
+function traduire(valeur) {
+    if (valeur === undefined || valeur === null) return valeur;
+    if (Array.isArray(valeur)) return valeur.map(v => traduire(v));
+    if (typeof valeur === 'string') return traductions[valeur] || valeur;
+    return valeur;
+}
+
 // Mois en français
 const moisFR = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
 
@@ -731,6 +760,14 @@ function showPlant() {
 
 // Cache localStorage pour les détails de plantes
 const CACHE_KEY = 'perenual_cache';
+const CACHE_VERSION_KEY = 'perenual_cache_version';
+const CACHE_VERSION = 2; // Incrémenter pour invalider le cache
+
+// Vider le cache si la version a changé
+if (localStorage.getItem(CACHE_VERSION_KEY) != CACHE_VERSION) {
+    localStorage.removeItem(CACHE_KEY);
+    localStorage.setItem(CACHE_VERSION_KEY, CACHE_VERSION);
+}
 
 function getCache() {
     try {
@@ -816,8 +853,9 @@ function afficherDetails(nomPlante, plant, modalBody) {
     html += '<table class="table table-sm">';
 
     const ligne = (label, valeur) => {
-        if (valeur !== undefined && valeur !== null && valeur !== '') {
-            const texte = Array.isArray(valeur) ? valeur.join(', ') : valeur;
+        const v = traduire(valeur);
+        if (v !== undefined && v !== null && v !== '') {
+            const texte = Array.isArray(v) ? v.join(', ') : v;
             html += `<tr><th class="text-nowrap">${label}</th><td>${texte}</td></tr>`;
         }
     };
