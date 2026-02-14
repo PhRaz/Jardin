@@ -729,6 +729,21 @@ function showPlant() {
     output.innerHTML = html;
 }
 
+// Cache localStorage pour les détails de plantes
+const CACHE_KEY = 'perenual_cache';
+
+function getCache() {
+    try {
+        return JSON.parse(localStorage.getItem(CACHE_KEY)) || {};
+    } catch { return {}; }
+}
+
+function setCache(nomPlante, data) {
+    const cache = getCache();
+    cache[nomPlante] = data;
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+}
+
 // Fonction pour récupérer les détails d'une plante via l'API Perenual
 async function fetchDetails(nomPlante) {
     const modalBody = document.getElementById('plantModalBody');
@@ -740,6 +755,13 @@ async function fetchDetails(nomPlante) {
     modal.show();
 
     try {
+        // Vérifier le cache
+        const cache = getCache();
+        if (cache[nomPlante]) {
+            afficherDetails(nomPlante, cache[nomPlante], modalBody);
+            return;
+        }
+
         // Trouver le nom anglais pour la recherche API
         const planteObj = plantes.find(p => p.nom === nomPlante);
         const searchName = planteObj && planteObj.nomEN ? planteObj.nomEN : nomPlante;
@@ -747,7 +769,10 @@ async function fetchDetails(nomPlante) {
         // Étape 1 : Rechercher la plante
         const searchUrl = `https://perenual.com/api/v2/species-list?key=${PERENUAL_API_KEY}&q=${encodeURIComponent(searchName)}`;
         const searchRes = await fetch(searchUrl);
-        if (!searchRes.ok) throw new Error(`Erreur recherche : ${searchRes.status}`);
+        if (!searchRes.ok) {
+            if (searchRes.status === 429) throw new Error('Limite de requêtes API atteinte. Réessayez demain.');
+            throw new Error(`Erreur recherche : ${searchRes.status}`);
+        }
         const searchData = await searchRes.json();
 
         if (!searchData.data || searchData.data.length === 0) {
@@ -761,61 +786,70 @@ async function fetchDetails(nomPlante) {
         // Étape 3 : Récupérer les détails
         const detailsUrl = `https://perenual.com/api/v2/species/details/${speciesId}?key=${PERENUAL_API_KEY}`;
         const detailsRes = await fetch(detailsUrl);
-        if (!detailsRes.ok) throw new Error(`Erreur détails : ${detailsRes.status}`);
+        if (!detailsRes.ok) {
+            if (detailsRes.status === 429) throw new Error('Limite de requêtes API atteinte. Réessayez demain.');
+            throw new Error(`Erreur détails : ${detailsRes.status}`);
+        }
         const plant = await detailsRes.json();
 
-        // Construire l'affichage
-        let html = '<div class="row">';
+        // Sauvegarder dans le cache
+        setCache(nomPlante, plant);
 
-        // Photo
-        if (plant.default_image && plant.default_image.medium_url) {
-            html += `<div class="col-md-4 mb-3"><img src="${plant.default_image.medium_url}" class="img-fluid rounded" alt="${plant.common_name || nomPlante}"></div>`;
-            html += '<div class="col-md-8">';
-        } else {
-            html += '<div class="col-12">';
-        }
-
-        html += '<table class="table table-sm">';
-
-        const ligne = (label, valeur) => {
-            if (valeur !== undefined && valeur !== null && valeur !== '') {
-                const texte = Array.isArray(valeur) ? valeur.join(', ') : valeur;
-                html += `<tr><th class="text-nowrap">${label}</th><td>${texte}</td></tr>`;
-            }
-        };
-
-        ligne('Nom commun', plant.common_name);
-        ligne('Nom scientifique', plant.scientific_name);
-        ligne('Famille', plant.family);
-        ligne('Cycle', plant.cycle);
-        ligne('Arrosage', plant.watering);
-        ligne('Ensoleillement', plant.sunlight);
-
-        if (plant.hardiness) {
-            const h = plant.hardiness;
-            ligne('Rusticité', h.min ? `Zone ${h.min} à ${h.max}` : h.max);
-        }
-
-        if (plant.dimensions) {
-            const d = plant.dimensions;
-            if (d.min_value || d.max_value) {
-                ligne('Taille', `${d.min_value || '?'} - ${d.max_value || '?'} ${d.unit || ''} (${d.type || ''})`);
-            }
-        }
-
-        ligne('Entretien', plant.maintenance);
-        ligne('Fruit comestible', plant.edible_fruit != null ? (plant.edible_fruit ? 'Oui' : 'Non') : null);
-        ligne('Feuille comestible', plant.edible_leaf != null ? (plant.edible_leaf ? 'Oui' : 'Non') : null);
-        ligne('Toxique (humains)', plant.poisonous_to_humans != null ? (plant.poisonous_to_humans ? 'Oui' : 'Non') : null);
-        ligne('Toxique (animaux)', plant.poisonous_to_pets != null ? (plant.poisonous_to_pets ? 'Oui' : 'Non') : null);
-
-        html += '</table></div></div>';
-
-        modalBody.innerHTML = html;
+        afficherDetails(nomPlante, plant, modalBody);
 
     } catch (err) {
         modalBody.innerHTML = `<div class="alert alert-danger">Erreur lors de la récupération des données : ${err.message}</div>`;
     }
+}
+
+function afficherDetails(nomPlante, plant, modalBody) {
+    let html = '<div class="row">';
+
+    // Photo
+    if (plant.default_image && plant.default_image.medium_url) {
+        html += `<div class="col-md-4 mb-3"><img src="${plant.default_image.medium_url}" class="img-fluid rounded" alt="${plant.common_name || nomPlante}"></div>`;
+        html += '<div class="col-md-8">';
+    } else {
+        html += '<div class="col-12">';
+    }
+
+    html += '<table class="table table-sm">';
+
+    const ligne = (label, valeur) => {
+        if (valeur !== undefined && valeur !== null && valeur !== '') {
+            const texte = Array.isArray(valeur) ? valeur.join(', ') : valeur;
+            html += `<tr><th class="text-nowrap">${label}</th><td>${texte}</td></tr>`;
+        }
+    };
+
+    ligne('Nom commun', plant.common_name);
+    ligne('Nom scientifique', plant.scientific_name);
+    ligne('Famille', plant.family);
+    ligne('Cycle', plant.cycle);
+    ligne('Arrosage', plant.watering);
+    ligne('Ensoleillement', plant.sunlight);
+
+    if (plant.hardiness) {
+        const h = plant.hardiness;
+        ligne('Rusticité', h.min ? `Zone ${h.min} à ${h.max}` : h.max);
+    }
+
+    if (plant.dimensions) {
+        const d = plant.dimensions;
+        if (d.min_value || d.max_value) {
+            ligne('Taille', `${d.min_value || '?'} - ${d.max_value || '?'} ${d.unit || ''} (${d.type || ''})`);
+        }
+    }
+
+    ligne('Entretien', plant.maintenance);
+    ligne('Fruit comestible', plant.edible_fruit != null ? (plant.edible_fruit ? 'Oui' : 'Non') : null);
+    ligne('Feuille comestible', plant.edible_leaf != null ? (plant.edible_leaf ? 'Oui' : 'Non') : null);
+    ligne('Toxique (humains)', plant.poisonous_to_humans != null ? (plant.poisonous_to_humans ? 'Oui' : 'Non') : null);
+    ligne('Toxique (animaux)', plant.poisonous_to_pets != null ? (plant.poisonous_to_pets ? 'Oui' : 'Non') : null);
+
+    html += '</table></div></div>';
+
+    modalBody.innerHTML = html;
 }
 
 // Initial display
