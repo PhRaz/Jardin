@@ -2,6 +2,7 @@
 const plantes = [
     {
         "nom": "pêcher",
+        "nomEN": "peach tree",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 3-4 m entre arbres."},
@@ -12,6 +13,7 @@ const plantes = [
     },
     {
         "nom": "prunier mirabelle",
+        "nomEN": "mirabelle plum",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 3-4 m entre arbres."},
@@ -22,6 +24,7 @@ const plantes = [
     },
     {
         "nom": "prunier prune rouge",
+        "nomEN": "red plum tree",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 3-4 m entre arbres."},
@@ -32,6 +35,7 @@ const plantes = [
     },
     {
         "nom": "prunier reine claude",
+        "nomEN": "greengage plum",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 3-4 m entre arbres."},
@@ -42,6 +46,7 @@ const plantes = [
     },
     {
         "nom": "noisettier",
+        "nomEN": "hazel",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 3-4 m entre arbustes."},
@@ -52,6 +57,7 @@ const plantes = [
     },
     {
         "nom": "noyer",
+        "nomEN": "walnut tree",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 8-10 m entre arbres."},
@@ -62,6 +68,7 @@ const plantes = [
     },
     {
         "nom": "tamaris",
+        "nomEN": "tamarisk",
         "type": "arbre ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, sol bien drainé."},
@@ -71,6 +78,7 @@ const plantes = [
     },
     {
         "nom": "fraisier",
+        "nomEN": "strawberry",
         "type": "fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Espacement 30-40 cm, ajouter compost."},
@@ -81,6 +89,7 @@ const plantes = [
     },
     {
         "nom": "framboisier remontant",
+        "nomEN": "raspberry",
         "type": "fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Espacement 50 cm, sol fertile."},
@@ -91,6 +100,7 @@ const plantes = [
     },
     {
         "nom": "groseiller",
+        "nomEN": "redcurrant",
         "type": "fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 1-1,5 m entre arbustes."},
@@ -101,6 +111,7 @@ const plantes = [
     },
     {
         "nom": "vigne",
+        "nomEN": "grape vine",
         "type": "fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, distance 1,5-2 m entre pieds."},
@@ -111,6 +122,7 @@ const plantes = [
     },
     {
         "nom": "rhubarbe",
+        "nomEN": "rhubarb",
         "type": "légume",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter à 60 cm d'espacement, sol riche et humide."},
@@ -120,6 +132,7 @@ const plantes = [
     },
     {
         "nom": "artichaut",
+        "nomEN": "artichoke",
         "type": "légume",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter à 1 m entre plants, sol riche et frais."},
@@ -129,6 +142,7 @@ const plantes = [
     },
     {
         "nom": "oseille",
+        "nomEN": "sorrel",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 3, "details": "Semer 2-3 cm de profondeur, 30 cm entre rangs."},
@@ -138,6 +152,7 @@ const plantes = [
     },
     {
         "nom": "menthe",
+        "nomEN": "mint",
         "type": "herbe aromatique",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter à 30 cm d'espacement, sol frais et drainé."},
@@ -147,6 +162,7 @@ const plantes = [
     },
     {
         "nom": "thym",
+        "nomEN": "thyme",
         "type": "herbe aromatique",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter à 30 cm, sol léger et drainé."},
@@ -156,6 +172,7 @@ const plantes = [
     },
     {
         "nom": "cerisier",
+        "nomEN": "cherry tree",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 6-8 m entre arbres, sol bien drainé."},
@@ -166,6 +183,7 @@ const plantes = [
     },
     {
         "nom": "merisier",
+        "nomEN": "wild cherry",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 8-10 m entre arbres."},
@@ -176,6 +194,7 @@ const plantes = [
     },
     {
         "nom": "cognassier",
+        "nomEN": "quince",
         "type": "arbre fruitier",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 4-5 m entre arbres, sol profond."},
@@ -186,6 +205,7 @@ const plantes = [
     },
     {
         "nom": "romarin",
+        "nomEN": "rosemary",
         "type": "herbe aromatique",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter à 40 cm d'espacement, sol léger et bien drainé."},
@@ -196,6 +216,7 @@ const plantes = [
     },
     {
         "nom": "persil",
+        "nomEN": "parsley",
         "type": "herbe aromatique",
         "entretien": [
             {"operation": "semis", "mois": 3, "details": "Semer en place, 20 cm entre rangs, levée lente (3 semaines)."},
@@ -205,6 +226,7 @@ const plantes = [
     },
     {
         "nom": "coriandre",
+        "nomEN": "coriander",
         "type": "herbe aromatique",
         "entretien": [
             {"operation": "semis", "mois": 4, "details": "Semer en place à 20 cm d'espacement, mi-ombre."},
@@ -214,6 +236,7 @@ const plantes = [
     },
     {
         "nom": "rosier",
+        "nomEN": "rose",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter à racines nues en automne, 50-80 cm entre pieds."},
@@ -224,6 +247,7 @@ const plantes = [
     },
     {
         "nom": "laurier rose",
+        "nomEN": "oleander",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter au printemps en plein soleil, sol bien drainé."},
@@ -234,6 +258,7 @@ const plantes = [
     },
     {
         "nom": "muguet",
+        "nomEN": "lily of the valley",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 10, "details": "Planter les griffes à 3 cm de profondeur, 10 cm d'espacement, à l'ombre."},
@@ -243,6 +268,7 @@ const plantes = [
     },
     {
         "nom": "fusain",
+        "nomEN": "euonymus",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, 1-2 m entre arbustes."},
@@ -252,6 +278,7 @@ const plantes = [
     },
     {
         "nom": "oranger du mexique",
+        "nomEN": "mexican orange",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter au printemps, sol bien drainé, emplacement abrité."},
@@ -261,6 +288,7 @@ const plantes = [
     },
     {
         "nom": "fuchsia",
+        "nomEN": "fuchsia",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 5, "details": "Planter après les gelées, mi-ombre, sol frais et riche."},
@@ -271,6 +299,7 @@ const plantes = [
     },
     {
         "nom": "géranium vivace",
+        "nomEN": "hardy geranium",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter au printemps, 30-40 cm d'espacement, sol ordinaire."},
@@ -280,6 +309,7 @@ const plantes = [
     },
     {
         "nom": "arbre à papillon noir",
+        "nomEN": "butterfly bush",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, plein soleil, sol bien drainé."},
@@ -289,6 +319,7 @@ const plantes = [
     },
     {
         "nom": "clématite",
+        "nomEN": "clematis",
         "type": "plante grimpante",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, pied à l'ombre, tête au soleil."},
@@ -299,6 +330,7 @@ const plantes = [
     },
     {
         "nom": "olivier",
+        "nomEN": "olive tree",
         "type": "arbre ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter au printemps, plein soleil, sol bien drainé."},
@@ -309,6 +341,7 @@ const plantes = [
     },
     {
         "nom": "hortensia",
+        "nomEN": "hydrangea",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, mi-ombre, sol acide et frais."},
@@ -318,6 +351,7 @@ const plantes = [
     },
     {
         "nom": "sauge arbustive",
+        "nomEN": "salvia",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter au printemps, plein soleil, sol bien drainé."},
@@ -327,6 +361,7 @@ const plantes = [
     },
     {
         "nom": "oeillet d'inde",
+        "nomEN": "marigold",
         "type": "fleur",
         "entretien": [
             {"operation": "semis", "mois": 3, "details": "Semer sous abri, repiquer après les gelées à 20 cm."},
@@ -336,6 +371,7 @@ const plantes = [
     },
     {
         "nom": "coquelicot",
+        "nomEN": "poppy",
         "type": "fleur",
         "entretien": [
             {"operation": "semis", "mois": 9, "details": "Semer à la volée en automne, sol pauvre et bien drainé."},
@@ -344,6 +380,7 @@ const plantes = [
     },
     {
         "nom": "perce-neige",
+        "nomEN": "snowdrop",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 9, "details": "Planter les bulbes à 5-8 cm de profondeur, 5 cm d'espacement."},
@@ -352,6 +389,7 @@ const plantes = [
     },
     {
         "nom": "lavande",
+        "nomEN": "lavender",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter au printemps, plein soleil, sol sec et drainé."},
@@ -361,6 +399,7 @@ const plantes = [
     },
     {
         "nom": "camélia",
+        "nomEN": "camellia",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, mi-ombre, sol acide et frais."},
@@ -371,6 +410,7 @@ const plantes = [
     },
     {
         "nom": "pivoines",
+        "nomEN": "peony",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 10, "details": "Planter en automne, yeux à 2-3 cm sous la surface, 80 cm entre pieds."},
@@ -381,6 +421,7 @@ const plantes = [
     },
     {
         "nom": "iris d'Alger",
+        "nomEN": "Algerian iris",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 9, "details": "Planter les rhizomes à fleur de sol, 20-30 cm d'espacement, mi-ombre."},
@@ -390,6 +431,7 @@ const plantes = [
     },
     {
         "nom": "croix de Jérusalem",
+        "nomEN": "Maltese cross",
         "type": "fleur",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, plein soleil, sol ordinaire et drainé."},
@@ -400,6 +442,7 @@ const plantes = [
     },
     {
         "nom": "azalée",
+        "nomEN": "azalea",
         "type": "arbuste ornemental",
         "entretien": [
             {"operation": "plantation", "mois": 3, "details": "Planter au printemps, mi-ombre, sol acide et frais."},
@@ -410,6 +453,7 @@ const plantes = [
     },
     {
         "nom": "chèvrefeuille",
+        "nomEN": "honeysuckle",
         "type": "plante grimpante",
         "entretien": [
             {"operation": "plantation", "mois": 11, "details": "Planter en automne, mi-ombre, sol frais et humifère."},
@@ -420,6 +464,7 @@ const plantes = [
     },
     {
         "nom": "giroflée",
+        "nomEN": "wallflower",
         "type": "fleur",
         "entretien": [
             {"operation": "semis", "mois": 5, "details": "Semer en pépinière, repiquer en automne à 25 cm."},
@@ -429,6 +474,7 @@ const plantes = [
     },
     {
         "nom": "pomme de terre",
+        "nomEN": "potato",
         "type": "légume",
         "entretien": [
             {"operation": "plantation", "mois": 4, "details": "Planter les tubercules germés à 10-15 cm de profondeur, 40 cm entre plants."},
@@ -439,6 +485,7 @@ const plantes = [
     },
     {
         "nom": "haricot vert",
+        "nomEN": "green bean",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 5, "details": "Semer en place à 3-4 cm de profondeur, rangs espacés de 40 cm."},
@@ -448,6 +495,7 @@ const plantes = [
     },
     {
         "nom": "courgette",
+        "nomEN": "zucchini",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 4, "details": "Semer sous abri en godets, 2 graines par godet."},
@@ -458,6 +506,7 @@ const plantes = [
     },
     {
         "nom": "betterave",
+        "nomEN": "beetroot",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 4, "details": "Semer en place à 2 cm de profondeur, éclaircir à 15 cm."},
@@ -467,6 +516,7 @@ const plantes = [
     },
     {
         "nom": "tomate",
+        "nomEN": "tomato",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 3, "details": "Semer sous abri à 20°C, repiquer en godets à 2 feuilles."},
@@ -478,6 +528,7 @@ const plantes = [
     },
     {
         "nom": "aubergine",
+        "nomEN": "eggplant",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 2, "details": "Semer sous abri chauffé à 20-25°C."},
@@ -488,6 +539,7 @@ const plantes = [
     },
     {
         "nom": "poivron",
+        "nomEN": "bell pepper",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 2, "details": "Semer sous abri chauffé à 20-25°C."},
@@ -498,6 +550,7 @@ const plantes = [
     },
     {
         "nom": "butternut",
+        "nomEN": "butternut squash",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 4, "details": "Semer sous abri en godets, 2 graines par godet."},
@@ -508,6 +561,7 @@ const plantes = [
     },
     {
         "nom": "mâche",
+        "nomEN": "corn salad",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 9, "details": "Semer en place à 1 cm de profondeur, rangs espacés de 20 cm."},
@@ -517,6 +571,7 @@ const plantes = [
     },
     {
         "nom": "mesclun",
+        "nomEN": "mesclun",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 3, "details": "Semer à la volée ou en rangs, sol frais et léger."},
@@ -527,6 +582,7 @@ const plantes = [
     },
     {
         "nom": "petit pois d'hiver",
+        "nomEN": "winter pea",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 10, "details": "Semer en place à 3 cm de profondeur, rangs espacés de 40 cm."},
@@ -537,6 +593,7 @@ const plantes = [
     },
     {
         "nom": "ail",
+        "nomEN": "garlic",
         "type": "légume",
         "entretien": [
             {"operation": "plantation", "mois": 10, "details": "Planter les caïeux pointe en haut à 3 cm de profondeur, 15 cm entre plants."},
@@ -546,6 +603,7 @@ const plantes = [
     },
     {
         "nom": "échalote",
+        "nomEN": "shallot",
         "type": "légume",
         "entretien": [
             {"operation": "plantation", "mois": 2, "details": "Planter les bulbes pointe en haut, affleurant, 15 cm entre plants."},
@@ -555,6 +613,7 @@ const plantes = [
     },
     {
         "nom": "radis",
+        "nomEN": "radish",
         "type": "légume",
         "entretien": [
             {"operation": "semis", "mois": 3, "details": "Semer en place à 1 cm de profondeur, éclaircir à 3-5 cm."},
@@ -565,6 +624,7 @@ const plantes = [
     },
     {
         "nom": "basilic",
+        "nomEN": "basil",
         "type": "herbe aromatique",
         "entretien": [
             {"operation": "semis", "mois": 3, "details": "Semer sous abri à 20°C, repiquer après les gelées."},
@@ -574,6 +634,9 @@ const plantes = [
         ]
     }
 ];
+
+// Clé API Perenual
+const PERENUAL_API_KEY = 'sk-cfrx699048370f31d14827';
 
 // Mois en français
 const moisFR = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
@@ -634,12 +697,12 @@ function showMonth() {
         plantesType.forEach(p => {
             const ops = p.entretien.filter(op => op.mois === mois);
             ops.forEach(op => {
-                rows.push(`<tr><td>${p.nom}</td><td>${op.operation}</td><td class="details">${op.details}</td></tr>`);
+                rows.push(`<tr><td>${p.nom}</td><td>${op.operation}</td><td class="details">${op.details}</td><td><button class="btn btn-sm btn-outline-success" onclick="fetchDetails('${p.nom.replace(/'/g, "\\'")}')">Détails</button></td></tr>`);
             });
         });
         if (rows.length > 0) {
             html += `<h5 class="mt-3">${type.charAt(0).toUpperCase() + type.slice(1)}</h5>`;
-            html += `<table class="table table-striped table-hover"><thead><tr><th>Plante</th><th>Opération</th><th>Détails</th></tr></thead><tbody>`;
+            html += `<table class="table table-striped table-hover"><thead><tr><th>Plante</th><th>Opération</th><th>Détails</th><th></th></tr></thead><tbody>`;
             html += rows.join('');
             html += '</tbody></table>';
         }
@@ -656,12 +719,103 @@ function showPlant() {
     }
     // Trier les opérations par mois
     const ops = plante.entretien.sort((a, b) => a.mois - b.mois);
-    let html = `<h2>Opérations pour ${plante.nom}</h2><table class="table table-striped table-hover"><thead><tr><th>Mois</th><th>Opération</th><th>Détails</th></tr></thead><tbody>`;
+    let html = `<h2>Opérations pour ${plante.nom}</h2>`;
+    html += `<p><button class="btn btn-outline-success btn-sm mb-2" onclick="fetchDetails('${plante.nom.replace(/'/g, "\\'")}')">Voir les détails de cette plante</button></p>`;
+    html += `<table class="table table-striped table-hover"><thead><tr><th>Mois</th><th>Opération</th><th>Détails</th></tr></thead><tbody>`;
     ops.forEach(op => {
         html += `<tr><td>${moisFR[op.mois - 1]}</td><td>${op.operation}</td><td class="details">${op.details}</td></tr>`;
     });
     html += '</tbody></table>';
     output.innerHTML = html;
+}
+
+// Fonction pour récupérer les détails d'une plante via l'API Perenual
+async function fetchDetails(nomPlante) {
+    const modalBody = document.getElementById('plantModalBody');
+    const modalLabel = document.getElementById('plantModalLabel');
+    modalLabel.textContent = `Détails : ${nomPlante}`;
+    modalBody.innerHTML = '<div class="text-center my-4"><div class="spinner-border text-success" role="status"><span class="visually-hidden">Chargement...</span></div><p class="mt-2">Recherche en cours...</p></div>';
+
+    const modal = new bootstrap.Modal(document.getElementById('plantModal'));
+    modal.show();
+
+    try {
+        // Trouver le nom anglais pour la recherche API
+        const planteObj = plantes.find(p => p.nom === nomPlante);
+        const searchName = planteObj && planteObj.nomEN ? planteObj.nomEN : nomPlante;
+
+        // Étape 1 : Rechercher la plante
+        const searchUrl = `https://perenual.com/api/v2/species-list?key=${PERENUAL_API_KEY}&q=${encodeURIComponent(searchName)}`;
+        const searchRes = await fetch(searchUrl);
+        if (!searchRes.ok) throw new Error(`Erreur recherche : ${searchRes.status}`);
+        const searchData = await searchRes.json();
+
+        if (!searchData.data || searchData.data.length === 0) {
+            modalBody.innerHTML = `<div class="alert alert-warning">Aucun résultat trouvé pour « ${nomPlante} ».</div>`;
+            return;
+        }
+
+        // Étape 2 : Récupérer l'id du premier résultat
+        const speciesId = searchData.data[0].id;
+
+        // Étape 3 : Récupérer les détails
+        const detailsUrl = `https://perenual.com/api/v2/species/details/${speciesId}?key=${PERENUAL_API_KEY}`;
+        const detailsRes = await fetch(detailsUrl);
+        if (!detailsRes.ok) throw new Error(`Erreur détails : ${detailsRes.status}`);
+        const plant = await detailsRes.json();
+
+        // Construire l'affichage
+        let html = '<div class="row">';
+
+        // Photo
+        if (plant.default_image && plant.default_image.medium_url) {
+            html += `<div class="col-md-4 mb-3"><img src="${plant.default_image.medium_url}" class="img-fluid rounded" alt="${plant.common_name || nomPlante}"></div>`;
+            html += '<div class="col-md-8">';
+        } else {
+            html += '<div class="col-12">';
+        }
+
+        html += '<table class="table table-sm">';
+
+        const ligne = (label, valeur) => {
+            if (valeur !== undefined && valeur !== null && valeur !== '') {
+                const texte = Array.isArray(valeur) ? valeur.join(', ') : valeur;
+                html += `<tr><th class="text-nowrap">${label}</th><td>${texte}</td></tr>`;
+            }
+        };
+
+        ligne('Nom commun', plant.common_name);
+        ligne('Nom scientifique', plant.scientific_name);
+        ligne('Famille', plant.family);
+        ligne('Cycle', plant.cycle);
+        ligne('Arrosage', plant.watering);
+        ligne('Ensoleillement', plant.sunlight);
+
+        if (plant.hardiness) {
+            const h = plant.hardiness;
+            ligne('Rusticité', h.min ? `Zone ${h.min} à ${h.max}` : h.max);
+        }
+
+        if (plant.dimensions) {
+            const d = plant.dimensions;
+            if (d.min_value || d.max_value) {
+                ligne('Taille', `${d.min_value || '?'} - ${d.max_value || '?'} ${d.unit || ''} (${d.type || ''})`);
+            }
+        }
+
+        ligne('Entretien', plant.maintenance);
+        ligne('Fruit comestible', plant.edible_fruit != null ? (plant.edible_fruit ? 'Oui' : 'Non') : null);
+        ligne('Feuille comestible', plant.edible_leaf != null ? (plant.edible_leaf ? 'Oui' : 'Non') : null);
+        ligne('Toxique (humains)', plant.poisonous_to_humans != null ? (plant.poisonous_to_humans ? 'Oui' : 'Non') : null);
+        ligne('Toxique (animaux)', plant.poisonous_to_pets != null ? (plant.poisonous_to_pets ? 'Oui' : 'Non') : null);
+
+        html += '</table></div></div>';
+
+        modalBody.innerHTML = html;
+
+    } catch (err) {
+        modalBody.innerHTML = `<div class="alert alert-danger">Erreur lors de la récupération des données : ${err.message}</div>`;
+    }
 }
 
 // Initial display
