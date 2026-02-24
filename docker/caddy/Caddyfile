@@ -1,0 +1,17 @@
+:80 {
+	root * /var/www/html/public
+
+	# Compression
+	encode gzip
+
+	# Routing Symfony : essayer le fichier, sinon index.php
+	@notStatic {
+		not file
+	}
+	rewrite @notStatic /index.php
+
+	# FastCGI vers le conteneur PHP
+	php_fastcgi php:9000
+
+	file_server
+}
