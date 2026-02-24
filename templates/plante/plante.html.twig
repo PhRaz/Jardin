@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row mb-3">
+    <div class="col-auto">
+        <label for="view" class="form-label fw-bold">Vue :</label>
+        <select id="view" class="form-select" onchange="if(this.value==='month') window.location='{{ path('app_mois', {mois: moisCourant}) }}'">
+            <option value="month">Par mois</option>
+            <option value="plant" selected>Par plante</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <label for="plant" class="form-label fw-bold">Plante :</label>
+        <select id="plant" class="form-select" onchange="window.location='/plante/'+encodeURIComponent(this.value)">
+            {% for type, plantesDuType in plantesParType %}
+                <optgroup label="{{ type|capitalize }}">
+                    {% for p in plantesDuType %}
+                        <option value="{{ p.nom }}"{% if p.nom == plante.nom %} selected{% endif %}>{{ p.nom }}</option>
+                    {% endfor %}
+                </optgroup>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<h2>Opérations pour {{ plante.nom }}</h2>
+
+<table class="table table-striped table-hover table-operations">
+    <thead>
+        <tr>
+            <th>Mois</th>
+            <th>Opération</th>
+            <th>Détails</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for op in plante.entretien|sort((a, b) => a.mois <=> b.mois) %}
+            <tr>
+                <td>{{ moisLabels[op.mois] }}</td>
+                <td>{{ op.operation }}</td>
+                <td class="details">{{ op.details }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row mb-3">
+    <div class="col-auto">
+        <label for="view" class="form-label fw-bold">Vue :</label>
+        <select id="view" class="form-select" onchange="if(this.value==='plant') window.location='{{ path('app_plante', {nom: premierePlante}) }}'">
+            <option value="month" selected>Par mois</option>
+            <option value="plant">Par plante</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <label for="month" class="form-label fw-bold">Mois :</label>
+        <select id="month" class="form-select" onchange="window.location='/mois/'+this.value">
+            {% for i in 1..12 %}
+                <option value="{{ i }}"{% if i == moisCourant %} selected{% endif %}>{{ moisLabels[i] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+</div>
+
+<h2>Opérations pour {{ moisLabels[moisCourant] }}</h2>
+
+{% for type, operations in operationsParType %}
+    <h5 class="mt-3">{{ type|capitalize }}</h5>
+    <table class="table table-striped table-hover table-operations">
+        <thead>
+            <tr>
+                <th>Plante</th>
+                <th>Opération</th>
+                <th>Détails</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for op in operations %}
+                <tr>
+                    <td>{{ op.nom }}</td>
+                    <td>{{ op.operation }}</td>
+                    <td class="details">{{ op.details }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-muted">Aucune opération ce mois-ci.</p>
+{% endfor %}
+{% endblock %}
