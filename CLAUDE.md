@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 "Calendrier des plantes" — a French-language garden plant care calendar. The project has two layers:
 
-- **Frontend** : single-page app (vanilla HTML/CSS/JS) — `index.html` + `app.js`
-- **Backend** : Symfony 7.4 (PHP 8.3) with MongoDB via Doctrine ODM, served by Caddy, orchestré avec Docker Compose
+- **Frontend legacy** : single-page app (vanilla HTML/CSS/JS) — `index.html` + `app.js` (ouvrable directement dans un navigateur)
+- **Backend** : Symfony 7.4 (PHP 8.3) with MongoDB via Doctrine ODM, Twig pour le rendu server-side, served by Caddy, orchestré avec Docker Compose
 
 ## Running
 
@@ -31,7 +31,7 @@ docker compose exec php php bin/console app:import-plantes    # Importe les 60 p
   - Deux vues : `showMonth()` (opérations d'un mois) et `showPlant()` (opérations d'une plante)
   - Intégration API Trefle.io pour les détails botaniques avec cache localStorage
 
-### Backend (Symfony + MongoDB)
+### Backend (Symfony + MongoDB + Twig)
 
 ```
 docker/
@@ -45,13 +45,28 @@ src/
 ├── Command/
 │   └── ImportPlantesCommand.php  # app:import-plantes — charge fixtures/plantes.json
 ├── Controller/
+│   └── PlanteController.php # Routes : / → /mois/{n}, /mois/{mois}, /plante/{nom}
 └── Kernel.php
+templates/
+├── base.html.twig           # Layout : Bootstrap 5.3.3, navbar verte, CSS responsive
+└── plante/
+    ├── mois.html.twig       # Vue par mois : opérations groupées par type
+    └── plante.html.twig     # Vue par plante : opérations triées par mois
 fixtures/
 └── plantes.json             # 60 plantes exportées depuis app.js
 config/
 └── packages/
-    └── doctrine_mongodb.yaml  # Connexion MongoDB ODM
+    ├── doctrine_mongodb.yaml  # Connexion MongoDB ODM
+    └── twig.yaml              # Configuration Twig
 ```
+
+### Routes
+
+| Route | Action |
+|-------|--------|
+| `GET /` | Redirige vers `/mois/{mois_courant}` |
+| `GET /mois/{mois}` | Opérations du mois groupées par type de plante |
+| `GET /plante/{nom}` | Opérations d'une plante triées par mois |
 
 ### Docker
 
@@ -67,6 +82,7 @@ Credentials MongoDB : `jardin` / `jardin` (configurés dans `docker-compose.yml`
 ## Conventions
 
 - Language : tout le texte utilisateur et les noms de variables sont en français
-- PHP : attributs natifs PHP 8 pour le mapping ODM (`#[MongoDB\Document]`, `#[MongoDB\Field]`, etc.)
+- PHP : attributs natifs PHP 8 pour le mapping ODM (`#[MongoDB\Document]`, `#[MongoDB\Field]`, etc.) et le routing (`#[Route]`)
+- Templates Twig : navigation par `onchange` + `window.location` (rechargement de page, pas de SPA)
 - Structure des données plante : `{ nom: string, type: string, entretien: [{ operation: string, mois: int, details: string }] }`
 - Les mois sont indexés à partir de 1 (janvier = 1)
