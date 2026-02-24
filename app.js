@@ -1,4 +1,3 @@
-// Exemple de JSON (à remplacer par ton fichier complet)
 const plantes = [
     {
         "nom": "pêcher",
@@ -637,29 +636,28 @@ const plantes = [
     }
 ];
 
-// Clé API Perenual
-const PERENUAL_API_KEY = 'sk-cfrx699048370f31d14827';
+// API Trefle.io
+const TREFLE_API_TOKEN = 'usr-Sjf861s6j1ffaDJETgyrRbFW-1Ub1cjD5OPTGYBX7Lk';
+const CORS_PROXY = 'https://corsproxy.io/?url=';
 
 // Traductions anglais → français pour les valeurs de l'API
 const traductions = {
-    // Arrosage
-    "Frequent": "Fréquent", "Average": "Moyen", "Minimum": "Minimum", "None": "Aucun",
-    // Ensoleillement
-    "Full sun": "Plein soleil", "full sun": "Plein soleil",
-    "Part shade": "Mi-ombre", "part shade": "Mi-ombre",
-    "Part sun/part shade": "Soleil partiel / mi-ombre",
-    "Filtered shade": "Ombre filtrée", "Full shade": "Ombre totale",
-    "Deep shade": "Ombre profonde", "Sheltered": "Abrité",
-    "Sun": "Soleil", "sun": "Soleil",
-    // Cycle
+    // Cycle / durée
     "Perennial": "Vivace", "Annual": "Annuelle", "Biennial": "Bisannuelle",
     "Biannual": "Bisannuelle",
-    // Entretien
-    "Low": "Faible", "Moderate": "Modéré", "High": "Élevé",
+    // Feuillage
+    "Evergreen": "Persistant", "Deciduous": "Caduc", "Semi-evergreen": "Semi-persistant",
     // Divers
     "Yes": "Oui", "No": "Non",
     "Hardy": "Rustique", "Tender": "Fragile",
-    "Evergreen": "Persistant", "Deciduous": "Caduc", "Semi-evergreen": "Semi-persistant"
+    // Couleurs
+    "red": "rouge", "blue": "bleu", "white": "blanc", "yellow": "jaune",
+    "pink": "rose", "purple": "violet", "orange": "orange", "green": "vert",
+    "brown": "brun", "black": "noir", "grey": "gris", "silver": "argenté",
+    // Mois (pour bloom_months)
+    "jan": "janvier", "feb": "février", "mar": "mars", "apr": "avril",
+    "may": "mai", "jun": "juin", "jul": "juillet", "aug": "août",
+    "sep": "septembre", "oct": "octobre", "nov": "novembre", "dec": "décembre"
 };
 
 function traduire(valeur) {
@@ -761,9 +759,9 @@ function showPlant() {
 }
 
 // Cache localStorage pour les détails de plantes
-const CACHE_KEY = 'perenual_cache';
-const CACHE_VERSION_KEY = 'perenual_cache_version';
-const CACHE_VERSION = 2; // Incrémenter pour invalider le cache
+const CACHE_KEY = 'trefle_cache';
+const CACHE_VERSION_KEY = 'trefle_cache_version';
+const CACHE_VERSION = 3; // Incrémenter pour invalider le cache
 
 // Vider le cache si la version a changé
 if (localStorage.getItem(CACHE_VERSION_KEY) != CACHE_VERSION) {
@@ -783,7 +781,7 @@ function setCache(nomPlante, data) {
     localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
 }
 
-// Fonction pour récupérer les détails d'une plante via l'API Perenual
+// Fonction pour récupérer les détails d'une plante via l'API Trefle.io
 async function fetchDetails(nomPlante) {
     const modalBody = document.getElementById('plantModalBody');
     const modalLabel = document.getElementById('plantModalLabel');
@@ -806,10 +804,10 @@ async function fetchDetails(nomPlante) {
         const searchName = planteObj && planteObj.nomEN ? planteObj.nomEN : nomPlante;
 
         // Étape 1 : Rechercher la plante
-        const searchUrl = `https://perenual.com/api/v2/species-list?key=${PERENUAL_API_KEY}&q=${encodeURIComponent(searchName)}`;
+        const searchUrl = `${CORS_PROXY}${encodeURIComponent(`https://trefle.io/api/v1/plants/search?token=${TREFLE_API_TOKEN}&q=${encodeURIComponent(searchName)}`)}`;
         const searchRes = await fetch(searchUrl);
         if (!searchRes.ok) {
-            if (searchRes.status === 429) throw new Error('Limite de requêtes API atteinte. Réessayez demain.');
+            if (searchRes.status === 429) throw new Error('Limite de requêtes API atteinte. Réessayez plus tard.');
             throw new Error(`Erreur recherche : ${searchRes.status}`);
         }
         const searchData = await searchRes.json();
@@ -819,17 +817,15 @@ async function fetchDetails(nomPlante) {
             return;
         }
 
-        // Étape 2 : Récupérer l'id du premier résultat
+        // Étape 2 : Récupérer les détails de l'espèce
         const speciesId = searchData.data[0].id;
-
-        // Étape 3 : Récupérer les détails
-        const detailsUrl = `https://perenual.com/api/v2/species/details/${speciesId}?key=${PERENUAL_API_KEY}`;
+        const detailsUrl = `${CORS_PROXY}${encodeURIComponent(`https://trefle.io/api/v1/species/${speciesId}?token=${TREFLE_API_TOKEN}`)}`;
         const detailsRes = await fetch(detailsUrl);
         if (!detailsRes.ok) {
-            if (detailsRes.status === 429) throw new Error('Limite de requêtes API atteinte. Réessayez demain.');
+            if (detailsRes.status === 429) throw new Error('Limite de requêtes API atteinte. Réessayez plus tard.');
             throw new Error(`Erreur détails : ${detailsRes.status}`);
         }
-        const plant = await detailsRes.json();
+        const plant = (await detailsRes.json()).data;
 
         // Sauvegarder dans le cache
         setCache(nomPlante, plant);
@@ -841,12 +837,20 @@ async function fetchDetails(nomPlante) {
     }
 }
 
+// Convertir une échelle 0-10 en texte descriptif
+function echelleTexte(valeur, labels) {
+    if (valeur === null || valeur === undefined) return null;
+    const index = Math.min(Math.floor(valeur / (10 / labels.length)), labels.length - 1);
+    return `${labels[index]} (${valeur}/10)`;
+}
+
 function afficherDetails(nomPlante, plant, modalBody) {
     let html = '<div class="row">';
 
     // Photo
-    if (plant.default_image && plant.default_image.medium_url) {
-        html += `<div class="col-md-4 mb-3"><img src="${plant.default_image.medium_url}" class="img-fluid rounded" alt="${plant.common_name || nomPlante}"></div>`;
+    const imageUrl = plant.image_url || (plant.images && plant.images.flower && plant.images.flower[0] && plant.images.flower[0].image_url) || (plant.images && plant.images.habit && plant.images.habit[0] && plant.images.habit[0].image_url);
+    if (imageUrl) {
+        html += `<div class="col-md-4 mb-3"><img src="${imageUrl}" class="img-fluid rounded" alt="${plant.common_name || nomPlante}"></div>`;
         html += '<div class="col-md-8">';
     } else {
         html += '<div class="col-12">';
@@ -865,27 +869,55 @@ function afficherDetails(nomPlante, plant, modalBody) {
     ligne('Nom commun', plant.common_name);
     ligne('Nom scientifique', plant.scientific_name);
     ligne('Famille', plant.family);
-    ligne('Cycle', plant.cycle);
-    ligne('Arrosage', plant.watering);
-    ligne('Ensoleillement', plant.sunlight);
+    ligne('Cycle', plant.duration);
 
-    if (plant.hardiness) {
-        const h = plant.hardiness;
-        ligne('Rusticité', h.min ? `Zone ${h.min} à ${h.max}` : h.max);
+    // Croissance (growth)
+    const g = plant.growth || {};
+    ligne('Humidité', echelleTexte(g.atmospheric_humidity, ['Très sec', 'Sec', 'Moyen', 'Humide', 'Très humide']));
+    ligne('Ensoleillement', echelleTexte(g.light, ['Ombre totale', 'Ombre', 'Mi-ombre', 'Soleil partiel', 'Plein soleil']));
+
+    if (g.minimum_temperature && g.minimum_temperature.deg_c != null) {
+        ligne('Rusticité', `Min. ${g.minimum_temperature.deg_c} °C`);
     }
 
-    if (plant.dimensions) {
-        const d = plant.dimensions;
-        if (d.min_value || d.max_value) {
-            ligne('Taille', `${d.min_value || '?'} - ${d.max_value || '?'} ${d.unit || ''} (${d.type || ''})`);
-        }
+    // Spécifications
+    const spec = plant.specifications || {};
+    if (spec.maximum_height && spec.maximum_height.cm != null) {
+        const hm = spec.maximum_height.cm / 100;
+        ligne('Taille max.', `${hm} m`);
     }
 
-    ligne('Entretien', plant.maintenance);
-    ligne('Fruit comestible', plant.edible_fruit != null ? (plant.edible_fruit ? 'Oui' : 'Non') : null);
-    ligne('Feuille comestible', plant.edible_leaf != null ? (plant.edible_leaf ? 'Oui' : 'Non') : null);
-    ligne('Toxique (humains)', plant.poisonous_to_humans != null ? (plant.poisonous_to_humans ? 'Oui' : 'Non') : null);
-    ligne('Toxique (animaux)', plant.poisonous_to_pets != null ? (plant.poisonous_to_pets ? 'Oui' : 'Non') : null);
+    // Comestible
+    if (plant.edible !== null && plant.edible !== undefined) {
+        ligne('Comestible', plant.edible ? 'Oui' : 'Non');
+    }
+    if (plant.edible_part) {
+        ligne('Parties comestibles', plant.edible_part);
+    }
+
+    // Toxicité
+    if (spec.toxicity !== null && spec.toxicity !== undefined && spec.toxicity !== 'none') {
+        ligne('Toxicité', spec.toxicity);
+    }
+
+    // Fleur
+    const fl = plant.flower || {};
+    if (fl.color) ligne('Couleur des fleurs', fl.color);
+
+    // Feuillage
+    const fo = plant.foliage || {};
+    if (fo.color) ligne('Couleur du feuillage', fo.color);
+    if (fo.leaf_retention !== null && fo.leaf_retention !== undefined) {
+        ligne('Feuillage', fo.leaf_retention ? 'Persistant' : 'Caduc');
+    }
+
+    // Floraison
+    if (g.bloom_months) ligne('Mois de floraison', g.bloom_months);
+
+    // pH du sol
+    if (g.ph_minimum != null && g.ph_maximum != null) {
+        ligne('pH du sol', `${g.ph_minimum} – ${g.ph_maximum}`);
+    }
 
     html += '</table></div></div>';
 
