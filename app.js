@@ -308,13 +308,15 @@ const plantes = [
         ]
     },
     {
-        "nom": "arbre à papillon noir",
-        "nomEN": "butterfly bush",
+        "nom": "arbre à papillon nain",
+        "nomEN": "dwarf butterfly bush",
         "type": "arbuste ornemental",
         "entretien": [
-            {"operation": "plantation", "mois": 3, "details": "Planter au printemps, plein soleil, sol bien drainé."},
-            {"operation": "taille", "mois": 3, "details": "Rabattre sévèrement à 30 cm du sol chaque printemps."},
-            {"operation": "engrais", "mois": 4, "details": "Engrais organique au pied au printemps."}
+            {"operation": "plantation", "mois": 3, "details": "Planter au printemps, plein soleil, sol bien drainé. Convient aux petits espaces et à la culture en pot."},
+            {"operation": "taille", "mois": 3, "details": "Tailler en début de printemps : rabattre en laissant 2 bourgeons sur la pousse de l'année précédente. Conserver 5-6 branches principales."},
+            {"operation": "paillage", "mois": 3, "details": "Pailler au pied avec du compost pour garder le sol frais et limiter les mauvaises herbes."},
+            {"operation": "engrais", "mois": 4, "details": "Fertiliser avec modération au printemps, un excès favorise le feuillage au détriment des fleurs."},
+            {"operation": "suppression fleurs fanées", "mois": 7, "details": "Supprimer les fleurs fanées régulièrement pour prolonger la floraison et éviter les semis indésirables."}
         ]
     },
     {
