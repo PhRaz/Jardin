@@ -1,3 +1,6 @@
+# APP_DOMAIN=:80          → HTTP sur IP (test sans domaine)
+# APP_DOMAIN=monsite.fr   → HTTPS automatique via Let's Encrypt
+
 {env.APP_DOMAIN} {
 	root * /var/www/html/public
 
