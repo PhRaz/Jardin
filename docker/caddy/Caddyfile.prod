@@ -1,0 +1,14 @@
+{env.APP_DOMAIN} {
+	root * /var/www/html/public
+
+	encode gzip
+
+	@notStatic {
+		not file
+	}
+	rewrite @notStatic /index.php
+
+	php_fastcgi php:9000
+
+	file_server
+}
