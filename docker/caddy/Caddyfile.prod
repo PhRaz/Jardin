@@ -2,7 +2,7 @@
 # Remplacer TON_DOMAINE.fr par ton domaine, puis dans docker-compose.prod.yml
 # remettre ce fichier à la place de Caddyfile.
 
-TON_DOMAINE.fr {
+caljar.fr {
 	root * /var/www/html/public
 
 	encode gzip
