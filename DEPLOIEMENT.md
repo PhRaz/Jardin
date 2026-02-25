@@ -52,8 +52,7 @@ Remplir `.env.local` :
 
 ```env
 APP_ENV=prod
-APP_SECRET=                     # générer avec : openssl rand -hex 32
-APP_DOMAIN=:80                  # HTTP sur IP, sans domaine (voir section HTTPS ci-dessous)
+APP_SECRET=           # générer avec : openssl rand -hex 32
 
 MONGODB_URI=mongodb://jardin:CHANGE_PASSWORD@mongo:27017/?authSource=admin
 MONGODB_DB=jardin
@@ -97,8 +96,12 @@ docker compose -f docker-compose.prod.yml --env-file .env.local exec php php bin
 ```bash
 ufw allow 443
 
-nano /srv/jardin/.env.local
-# Modifier : APP_DOMAIN=monsite.fr
+# Éditer Caddyfile.prod : remplacer TON_DOMAINE.fr par ton vrai domaine
+nano /srv/jardin/docker/caddy/Caddyfile.prod
+
+# Switcher docker-compose.prod.yml sur Caddyfile.prod
+nano /srv/jardin/docker-compose.prod.yml
+# Changer : ./docker/caddy/Caddyfile → ./docker/caddy/Caddyfile.prod
 
 docker compose -f docker-compose.prod.yml --env-file .env.local restart caddy
 ```
