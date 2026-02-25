@@ -63,11 +63,14 @@ MONGO_PASSWORD=CHANGE_PASSWORD  # choisir un mot de passe fort
 TREFLE_API_TOKEN=usr-Sjf861s6j1ffaDJETgyrRbFW-1Ub1cjD5OPTGYBX7Lk
 ```
 
+> **Important** : Docker Compose ne lit pas `.env.local` automatiquement.
+> Il faut ajouter `--env-file .env.local` à toutes les commandes `docker compose`.
+
 ```bash
-docker compose -f docker-compose.prod.yml up -d --build
-docker compose -f docker-compose.prod.yml exec php composer install --no-dev --optimize-autoloader
-docker compose -f docker-compose.prod.yml exec php php bin/console app:import-plantes
-docker compose -f docker-compose.prod.yml exec php php bin/console cache:warmup
+docker compose -f docker-compose.prod.yml --env-file .env.local up -d --build
+docker compose -f docker-compose.prod.yml --env-file .env.local exec php composer install --no-dev --optimize-autoloader
+docker compose -f docker-compose.prod.yml --env-file .env.local exec php php bin/console app:import-plantes
+docker compose -f docker-compose.prod.yml --env-file .env.local exec php php bin/console cache:warmup
 ```
 
 Le site est accessible sur **`http://IP_DU_SERVEUR`**.
@@ -79,8 +82,8 @@ Le site est accessible sur **`http://IP_DU_SERVEUR`**.
 ```bash
 cd /srv/jardin
 git pull
-docker compose -f docker-compose.prod.yml up -d --build
-docker compose -f docker-compose.prod.yml exec php php bin/console cache:clear
+docker compose -f docker-compose.prod.yml --env-file .env.local up -d --build
+docker compose -f docker-compose.prod.yml --env-file .env.local exec php php bin/console cache:clear
 ```
 
 ---
@@ -97,7 +100,7 @@ ufw allow 443
 nano /srv/jardin/.env.local
 # Modifier : APP_DOMAIN=monsite.fr
 
-docker compose -f docker-compose.prod.yml restart caddy
+docker compose -f docker-compose.prod.yml --env-file .env.local restart caddy
 ```
 
 Caddy obtient automatiquement le certificat **Let's Encrypt**.
@@ -107,19 +110,22 @@ Caddy obtient automatiquement le certificat **Let's Encrypt**.
 ## Commandes utiles
 
 ```bash
+# Alias pratique pour éviter de répéter les flags
+alias dc="docker compose -f docker-compose.prod.yml --env-file .env.local"
+
 # Voir les logs
-docker compose -f docker-compose.prod.yml logs -f
+dc logs -f
 
 # Voir les logs d'un service
-docker compose -f docker-compose.prod.yml logs -f caddy
-docker compose -f docker-compose.prod.yml logs -f php
+dc logs -f caddy
+dc logs -f php
 
 # Redémarrer un service
-docker compose -f docker-compose.prod.yml restart php
+dc restart php
 
 # Arrêter tout
-docker compose -f docker-compose.prod.yml down
+dc down
 
 # Shell PHP
-docker compose -f docker-compose.prod.yml exec php bash
+dc exec php bash
 ```
