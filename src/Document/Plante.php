@@ -19,6 +19,9 @@ class Plante
     #[MongoDB\Field(type: 'string')]
     private string $type;
 
+    #[MongoDB\Field(type: 'string', nullable: true)]
+    private ?string $nomEN = null;
+
     /** @var Collection<int, Entretien> */
     #[MongoDB\EmbedMany(targetDocument: Entretien::class)]
     private Collection $entretien;
@@ -52,6 +55,17 @@ class Plante
     public function setType(string $type): self
     {
         $this->type = $type;
+        return $this;
+    }
+
+    public function getNomEN(): ?string
+    {
+        return $this->nomEN;
+    }
+
+    public function setNomEN(?string $nomEN): self
+    {
+        $this->nomEN = $nomEN;
         return $this;
     }
 

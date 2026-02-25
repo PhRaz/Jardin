@@ -45,6 +45,7 @@ class ImportPlantesCommand extends Command
         foreach ($data as $item) {
             $plante = new Plante();
             $plante->setNom($item['nom']);
+            $plante->setNomEN($item['nomEN'] ?? null);
             $plante->setType($item['type']);
 
             foreach ($item['entretien'] as $e) {

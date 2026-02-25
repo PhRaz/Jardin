@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Document\Plante;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -86,6 +87,65 @@ class PlanteController extends AbstractController
             'moisLabels' => self::MOIS_LABELS,
             'moisCourant' => (int) date('n'),
         ]);
+    }
+
+    #[Route('/api/plante/{nom}/details', name: 'api_plante_details')]
+    public function details(string $nom, DocumentManager $dm): JsonResponse
+    {
+        $plante = $dm->getRepository(Plante::class)->findOneBy(['nom' => $nom]);
+        if (!$plante) {
+            return $this->json(['error' => 'Plante non trouvée'], 404);
+        }
+
+        $token = $_ENV['TREFLE_API_TOKEN'] ?? '';
+        $searchName = $plante->getNomEN() ?? $nom;
+
+        $searchUrl = sprintf(
+            'https://trefle.io/api/v1/plants/search?token=%s&q=%s',
+            urlencode($token),
+            urlencode($searchName)
+        );
+
+        $searchData = $this->trefleGet($searchUrl);
+        if ($searchData === null) {
+            return $this->json(['error' => 'Erreur lors de la recherche Trefle.io'], 502);
+        }
+        if (empty($searchData['data'])) {
+            return $this->json(['error' => "Aucun résultat pour « $nom »"], 404);
+        }
+
+        $speciesId = $searchData['data'][0]['id'];
+        $detailsUrl = sprintf(
+            'https://trefle.io/api/v1/species/%d?token=%s',
+            $speciesId,
+            urlencode($token)
+        );
+
+        $detailsData = $this->trefleGet($detailsUrl);
+        if ($detailsData === null) {
+            return $this->json(['error' => 'Erreur lors de la récupération des détails'], 502);
+        }
+
+        return $this->json($detailsData['data'] ?? []);
+    }
+
+    private function trefleGet(string $url): ?array
+    {
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 10,
+                'ignore_errors' => true,
+                'header' => "Accept: application/json\r\n",
+            ],
+        ]);
+
+        $response = @file_get_contents($url, false, $context);
+        if ($response === false) {
+            return null;
+        }
+
+        $data = json_decode($response, true);
+        return is_array($data) ? $data : null;
     }
 
     /**
