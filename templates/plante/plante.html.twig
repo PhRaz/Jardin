@@ -44,7 +44,7 @@
     </tbody>
 </table>
 
-<div id="details-section" class="mt-4">
+<div id="details-section" class="mt-4" data-nom="{{ plante.nom|e('html_attr') }}">
     <div class="text-center my-3">
         <div class="spinner-border text-success" role="status">
             <span class="visually-hidden">Chargement...</span>
@@ -53,105 +53,4 @@
     </div>
 </div>
 
-<script>
-const traductions = {
-    "Perennial": "Vivace", "Annual": "Annuelle", "Biennial": "Bisannuelle",
-    "Evergreen": "Persistant", "Deciduous": "Caduc", "Semi-evergreen": "Semi-persistant",
-    "Yes": "Oui", "No": "Non",
-    "Hardy": "Rustique", "Tender": "Fragile",
-    "red": "rouge", "blue": "bleu", "white": "blanc", "yellow": "jaune",
-    "pink": "rose", "purple": "violet", "orange": "orange", "green": "vert",
-    "brown": "brun", "black": "noir", "grey": "gris", "silver": "argenté",
-    "jan": "janvier", "feb": "février", "mar": "mars", "apr": "avril",
-    "may": "mai", "jun": "juin", "jul": "juillet", "aug": "août",
-    "sep": "septembre", "oct": "octobre", "nov": "novembre", "dec": "décembre"
-};
-
-function traduire(val) {
-    if (val === null || val === undefined) return val;
-    if (Array.isArray(val)) return val.map(traduire);
-    if (typeof val === 'string') return traductions[val] || val;
-    return val;
-}
-
-function echelleTexte(val, labels) {
-    if (val === null || val === undefined) return null;
-    const idx = Math.min(Math.floor(val / (10 / labels.length)), labels.length - 1);
-    return `${labels[idx]} (${val}/10)`;
-}
-
-async function chargerDetails() {
-    const section = document.getElementById('details-section');
-    const nom = {{ plante.nom|json_encode|raw }};
-
-    try {
-        const res = await fetch(`/api/plante/${encodeURIComponent(nom)}/details`);
-        if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.error || `Erreur ${res.status}`);
-        }
-        const plant = await res.json();
-
-        const imageUrl = plant.image_url
-            || (plant.images?.flower?.[0]?.image_url)
-            || (plant.images?.habit?.[0]?.image_url);
-
-        const ligne = (label, val) => {
-            const v = traduire(val);
-            if (v !== undefined && v !== null && v !== '') {
-                const texte = Array.isArray(v) ? v.join(', ') : v;
-                return `<tr><th class="text-nowrap">${label}</th><td>${texte}</td></tr>`;
-            }
-            return '';
-        };
-
-        const g    = plant.growth || {};
-        const spec = plant.specifications || {};
-        const fl   = plant.flower || {};
-        const fo   = plant.foliage || {};
-
-        let rows = '';
-        rows += ligne('Nom commun', plant.common_name);
-        rows += ligne('Nom scientifique', plant.scientific_name);
-        rows += ligne('Famille', plant.family);
-        rows += ligne('Cycle', plant.duration);
-        rows += ligne('Humidité', echelleTexte(g.atmospheric_humidity, ['Très sec', 'Sec', 'Moyen', 'Humide', 'Très humide']));
-        rows += ligne('Ensoleillement', echelleTexte(g.light, ['Ombre totale', 'Ombre', 'Mi-ombre', 'Soleil partiel', 'Plein soleil']));
-        if (g.minimum_temperature?.deg_c != null) {
-            rows += ligne('Rusticité', `Min. ${g.minimum_temperature.deg_c} °C`);
-        }
-        if (spec.maximum_height?.cm != null) {
-            rows += ligne('Taille max.', `${spec.maximum_height.cm / 100} m`);
-        }
-        if (plant.edible !== null && plant.edible !== undefined) {
-            rows += ligne('Comestible', plant.edible ? 'Oui' : 'Non');
-        }
-        if (plant.edible_part) rows += ligne('Parties comestibles', plant.edible_part);
-        if (spec.toxicity && spec.toxicity !== 'none') rows += ligne('Toxicité', spec.toxicity);
-        if (fl.color) rows += ligne('Couleur des fleurs', fl.color);
-        if (fo.color) rows += ligne('Couleur du feuillage', fo.color);
-        if (fo.leaf_retention !== null && fo.leaf_retention !== undefined) {
-            rows += ligne('Feuillage', fo.leaf_retention ? 'Persistant' : 'Caduc');
-        }
-        if (g.bloom_months) rows += ligne('Mois de floraison', g.bloom_months);
-
-        let html = '<h5 class="mb-3">Informations botaniques</h5><div class="row">';
-        if (imageUrl) {
-            html += `<div class="col-md-3 mb-3"><img src="${imageUrl}" class="img-fluid rounded shadow-sm" alt="${plant.common_name || nom}"></div>`;
-            html += '<div class="col-md-9">';
-        } else {
-            html += '<div class="col-12">';
-        }
-        html += `<table class="table table-sm table-bordered">${rows}</table>`;
-        html += '</div></div>';
-
-        section.innerHTML = html;
-
-    } catch (err) {
-        section.innerHTML = `<div class="alert alert-warning">Informations botaniques non disponibles : ${err.message}</div>`;
-    }
-}
-
-chargerDetails();
-</script>
 {% endblock %}

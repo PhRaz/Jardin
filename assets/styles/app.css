@@ -1,0 +1,25 @@
+td.details { font-size: 0.9em; color: #666; word-wrap: break-word; }
+
+@media (max-width: 767px) {
+    .table-operations { table-layout: auto !important; }
+    .table-operations thead { display: none; }
+    .table-operations tbody tr {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        border-bottom: 1px solid #dee2e6;
+        padding: 0.5rem 0;
+    }
+    .table-operations tbody tr td {
+        border: none;
+        padding: 0.15rem 0.5rem;
+    }
+    /* Plante — prend l'espace disponible, ligne 1 */
+    .table-operations tbody tr td:nth-child(1) { font-weight: bold; flex: 1; order: 1; }
+    /* Bouton — collé à droite sur la ligne 1 */
+    .table-operations tbody tr td:nth-child(4) { order: 2; }
+    /* Opération — pleine largeur, ligne 2 */
+    .table-operations tbody tr td:nth-child(2) { width: 100%; order: 3; }
+    /* Détails — pleine largeur, ligne 3 */
+    .table-operations tbody tr td:nth-child(3) { width: 100%; order: 4; }
+}
