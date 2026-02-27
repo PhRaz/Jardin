@@ -81,7 +81,10 @@ Le site est accessible sur **`http://IP_DU_SERVEUR`**.
 ```bash
 cd /srv/jardin
 git pull
+npm ci
+npm run build
 docker compose -f docker-compose.prod.yml --env-file .env.local up -d --build
+docker compose -f docker-compose.prod.yml --env-file .env.local exec php composer install --no-dev --optimize-autoloader
 docker compose -f docker-compose.prod.yml --env-file .env.local exec php php bin/console cache:clear
 ```
 
