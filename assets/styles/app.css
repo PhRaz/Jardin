@@ -1,5 +1,22 @@
 td.details { font-size: 0.9em; color: #666; word-wrap: break-word; }
 
+.btn-link-nav {
+    display: inline-block;
+    width: 100%;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.875rem;
+    border: 1px solid #198754;
+    border-radius: 0.375rem;
+    color: #198754;
+    text-decoration: none;
+    line-height: 1.5;
+    text-align: center;
+}
+.btn-link-nav:hover {
+    background-color: #198754;
+    color: #fff;
+}
+
 @media (max-width: 767px) {
     .table-operations { table-layout: auto !important; }
     .table-operations thead { display: none; }

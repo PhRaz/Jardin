@@ -41,7 +41,7 @@
         <tbody>
             {% for op in operations %}
                 <tr>
-                    <td>{{ op.nom }}</td>
+                    <td><a class="btn-link-nav" href="{{ path('app_plante', {nom: op.nom}) }}">{{ op.nom }}</a></td>
                     <td>{{ op.operation }}</td>
                     <td class="details">{{ op.details }}</td>
                     <td>

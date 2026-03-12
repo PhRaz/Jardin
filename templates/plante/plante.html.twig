@@ -36,7 +36,7 @@
     <tbody>
         {% for op in plante.entretien|sort((a, b) => a.mois <=> b.mois) %}
             <tr>
-                <td>{{ moisLabels[op.mois] }}</td>
+                <td><a class="btn-link-nav" href="{{ path('app_mois', {mois: op.mois}) }}">{{ moisLabels[op.mois] }}</a></td>
                 <td>{{ op.operation }}</td>
                 <td class="details">{{ op.details }}</td>
             </tr>
