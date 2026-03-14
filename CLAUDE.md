@@ -16,6 +16,11 @@ docker compose exec php composer install                      # Installe les dé
 docker compose exec php php bin/console app:import-plantes    # Importe les 60 plantes dans MongoDB
 ```
 
+> **Important** : toujours exécuter les commandes `bin/console` avec `-u www-data` pour éviter des problèmes de permissions sur `var/cache/` :
+> ```bash
+> docker compose exec -u www-data php php bin/console cache:clear
+> ```
+
 - Symfony : http://localhost:8080
 - Mongo Express : http://localhost:8081
 

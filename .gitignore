@@ -1,6 +1,10 @@
 .idea/
 /node_modules/
 /public/build/
+/public/images/plantes/*.jpg
+/public/images/plantes/*.jpeg
+/public/images/plantes/*.png
+/public/images/plantes/*.webp
 
 ###> symfony/framework-bundle ###
 /.env.local
