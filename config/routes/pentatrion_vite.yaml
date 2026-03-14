@@ -1,0 +1,9 @@
+when@dev:
+    _pentatrion_vite:
+        resource: "@PentatrionViteBundle/Resources/config/routing.yaml"
+        prefix: /build
+
+    _profiler_vite:
+        path: /_profiler/vite
+        defaults:
+            _controller: Pentatrion\ViteBundle\Controller\ProfilerController::info
