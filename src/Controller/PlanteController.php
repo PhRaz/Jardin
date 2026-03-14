@@ -98,10 +98,17 @@ class PlanteController extends AbstractController
             return $this->json(['error' => 'Plante non trouvée'], 404);
         }
 
-        // Retourner le cache si valide
+        // Retourner le cache si valide et image disponible
         $cache = $plante->getTrefleCache();
         if ($cache !== null && $cache->estValide()) {
-            return $this->json($cache->getDonnees());
+            $imageLocale = $cache->getImageLocale();
+            $cheminAbsolu = $imageLocale
+                ? $this->getParameter('kernel.project_dir') . '/public' . $imageLocale
+                : null;
+            if ($cheminAbsolu === null || file_exists($cheminAbsolu)) {
+                return $this->json($cache->getDonnees());
+            }
+            // Image locale manquante sur le disque → on recalcule
         }
 
         $token = $_ENV['TREFLE_API_TOKEN'] ?? '';
@@ -177,7 +184,9 @@ class PlanteController extends AbstractController
             return null;
         }
 
-        file_put_contents($cheminLocal, $contenu);
+        if (file_put_contents($cheminLocal, $contenu) === false) {
+            return null;
+        }
 
         return '/images/plantes/' . $nomFichier;
     }

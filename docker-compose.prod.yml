@@ -5,6 +5,7 @@ services:
       dockerfile: docker/php/Dockerfile
     volumes:
       - .:/var/www/html
+      - plantes_images:/var/www/html/public/images/plantes
     working_dir: /var/www/html
     depends_on:
       - mongo
@@ -18,6 +19,7 @@ services:
     volumes:
       - ./docker/caddy/Caddyfile.prod:/etc/caddy/Caddyfile
       - .:/var/www/html
+      - plantes_images:/var/www/html/public/images/plantes
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
@@ -36,3 +38,4 @@ volumes:
   mongo_data:
   caddy_data:
   caddy_config:
+  plantes_images:
