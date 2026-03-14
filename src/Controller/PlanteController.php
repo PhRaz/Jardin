@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Document\Plante;
+use App\Document\TrefleCache;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -97,6 +98,12 @@ class PlanteController extends AbstractController
             return $this->json(['error' => 'Plante non trouvée'], 404);
         }
 
+        // Retourner le cache si valide
+        $cache = $plante->getTrefleCache();
+        if ($cache !== null && $cache->estValide()) {
+            return $this->json($cache->getDonnees());
+        }
+
         $token = $_ENV['TREFLE_API_TOKEN'] ?? '';
         $searchName = $plante->getNomEN() ?? $nom;
 
@@ -126,7 +133,53 @@ class PlanteController extends AbstractController
             return $this->json(['error' => 'Erreur lors de la récupération des détails'], 502);
         }
 
-        return $this->json($detailsData['data'] ?? []);
+        $donnees = $detailsData['data'] ?? [];
+
+        // Télécharger l'image en local
+        $imageDistante = $donnees['image_url']
+            ?? $donnees['images']['flower'][0]['image_url']
+            ?? $donnees['images']['habit'][0]['image_url']
+            ?? null;
+
+        if ($imageDistante) {
+            $imageLocale = $this->telechargerImage($imageDistante, $nom);
+            if ($imageLocale !== null) {
+                $donnees['image_url'] = $imageLocale;
+            }
+        }
+
+        // Sauvegarder en cache MongoDB
+        $nouveauCache = new TrefleCache();
+        $nouveauCache->setDonnees($donnees);
+        $nouveauCache->setImageLocale($donnees['image_url'] ?? null);
+        $plante->setTrefleCache($nouveauCache);
+        $dm->flush();
+
+        return $this->json($donnees);
+    }
+
+    private function telechargerImage(string $urlDistante, string $nomPlante): ?string
+    {
+        $dossier = $this->getParameter('kernel.project_dir') . '/public/images/plantes';
+        if (!is_dir($dossier)) {
+            mkdir($dossier, 0755, true);
+        }
+
+        $ext = pathinfo(parse_url($urlDistante, PHP_URL_PATH), PATHINFO_EXTENSION) ?: 'jpg';
+        $ext = in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'webp']) ? strtolower($ext) : 'jpg';
+
+        $nomFichier = preg_replace('/[^a-z0-9]+/', '-', strtolower($nomPlante));
+        $nomFichier = trim($nomFichier, '-') . '.' . $ext;
+        $cheminLocal = $dossier . '/' . $nomFichier;
+
+        $contenu = @file_get_contents($urlDistante);
+        if ($contenu === false) {
+            return null;
+        }
+
+        file_put_contents($cheminLocal, $contenu);
+
+        return '/images/plantes/' . $nomFichier;
     }
 
     private function trefleGet(string $url): ?array

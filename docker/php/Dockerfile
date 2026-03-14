@@ -22,3 +22,6 @@ RUN pecl install mongodb && docker-php-ext-enable mongodb
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+
+# Dossier pour les images téléchargées depuis Trefle.io
+RUN mkdir -p public/images/plantes && chown www-data:www-data public/images/plantes

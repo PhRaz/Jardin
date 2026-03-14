@@ -4,9 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-"Calendrier des plantes" — a French-language garden plant care calendar. The project has two layers:
+"Calendrier des plantes" — a French-language garden plant care calendar.
 
-- **Frontend legacy** : single-page app (vanilla HTML/CSS/JS) — `index.html` + `app.js` (ouvrable directement dans un navigateur)
 - **Backend** : Symfony 7.4 (PHP 8.3) with MongoDB via Doctrine ODM, Twig pour le rendu server-side, served by Caddy, orchestré avec Docker Compose
 
 ## Running
@@ -19,19 +18,10 @@ docker compose exec php php bin/console app:import-plantes    # Importe les 60 p
 
 - Symfony : http://localhost:8080
 - Mongo Express : http://localhost:8081
-- Le frontend statique (`index.html`) peut toujours être ouvert directement dans un navigateur
 
 ## Architecture
 
-### Frontend (client-side)
-
-- **`index.html`** — Structure HTML, CSS inline, sélecteurs de vue (mois/plante)
-- **`app.js`** — Logique applicative :
-  - Base de données des plantes (tableau `plantes`) avec `nom`, `type`, `entretien`
-  - Deux vues : `showMonth()` (opérations d'un mois) et `showPlant()` (opérations d'une plante)
-  - Intégration API Trefle.io pour les détails botaniques avec cache localStorage
-
-### Backend (Symfony + MongoDB + Twig)
+### Symfony + MongoDB + Twig
 
 ```
 docker/
@@ -53,7 +43,7 @@ templates/
     ├── mois.html.twig       # Vue par mois : opérations groupées par type
     └── plante.html.twig     # Vue par plante : opérations triées par mois
 fixtures/
-└── plantes.json             # 60 plantes exportées depuis app.js
+└── plantes.json             # 60 plantes
 config/
 └── packages/
     ├── doctrine_mongodb.yaml  # Connexion MongoDB ODM

@@ -22,6 +22,9 @@ class Plante
     #[MongoDB\Field(type: 'string', nullable: true)]
     private ?string $nomEN = null;
 
+    #[MongoDB\EmbedOne(targetDocument: TrefleCache::class, nullable: true)]
+    private ?TrefleCache $trefleCache = null;
+
     /** @var Collection<int, Entretien> */
     #[MongoDB\EmbedMany(targetDocument: Entretien::class)]
     private Collection $entretien;
@@ -84,6 +87,17 @@ class Plante
     public function removeEntretien(Entretien $entretien): self
     {
         $this->entretien->removeElement($entretien);
+        return $this;
+    }
+
+    public function getTrefleCache(): ?TrefleCache
+    {
+        return $this->trefleCache;
+    }
+
+    public function setTrefleCache(?TrefleCache $trefleCache): self
+    {
+        $this->trefleCache = $trefleCache;
         return $this;
     }
 }
