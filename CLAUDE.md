@@ -7,13 +7,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 "Calendrier des plantes" — a French-language garden plant care calendar.
 
 - **Backend** : Symfony 7.4 (PHP 8.3) with MongoDB via Doctrine ODM, Twig pour le rendu server-side, served by Caddy, orchestré avec Docker Compose
+- **PWA** : manifest.json + service worker (`public/sw.js`) pour installation et mode offline
 
 ## Running
 
 ```bash
-docker compose up -d                                          # Démarre les 4 conteneurs
-docker compose exec php composer install                      # Installe les dépendances PHP
-docker compose exec php php bin/console app:import-plantes    # Importe les 60 plantes dans MongoDB
+make dev                                                              # Démarre les 4 conteneurs
+docker compose exec php composer install                              # Installe les dépendances PHP
+docker compose exec php php bin/console app:import-plantes            # Importe les 60 plantes dans MongoDB
 ```
 
 > **Important** : toujours exécuter les commandes `bin/console` avec `-u www-data` pour éviter des problèmes de permissions sur `var/cache/` :
@@ -23,6 +24,20 @@ docker compose exec php php bin/console app:import-plantes    # Importe les 60 p
 
 - Symfony : http://localhost:8080
 - Mongo Express : http://localhost:8081
+
+## Commandes Make
+
+| Commande | Rôle |
+|----------|------|
+| `make dev` | Démarre Docker en local |
+| `make stop` | Arrête Docker |
+| `make logs` | Logs dev en temps réel |
+| `make shell` | Shell PHP dev |
+| `make cache-clear` | Vide le cache Symfony (dev) |
+| `make deploy` | Déploie sur le serveur de production |
+| `make prod-logs` | Logs prod en temps réel |
+| `make prod-shell` | Shell PHP prod |
+| `make prod-ps` | Statut des conteneurs prod |
 
 ## Architecture
 
@@ -40,13 +55,18 @@ src/
 ├── Command/
 │   └── ImportPlantesCommand.php  # app:import-plantes — charge fixtures/plantes.json
 ├── Controller/
-│   └── PlanteController.php # Routes : / → /mois/{n}, /mois/{mois}, /plante/{nom}
+│   └── PlanteController.php # Routes : / → /mois/{n}, /mois/{mois}, /plante/{nom}, /offline
 └── Kernel.php
 templates/
 ├── base.html.twig           # Layout : Bootstrap 5.3.3, navbar verte, CSS responsive
+├── offline.html.twig        # Page affichée hors connexion (PWA)
 └── plante/
     ├── mois.html.twig       # Vue par mois : opérations groupées par type
     └── plante.html.twig     # Vue par plante : opérations triées par mois
+public/
+├── manifest.json            # Manifeste PWA
+├── sw.js                    # Service worker (cache offline)
+└── icons/                   # Icônes PWA 192×192 et 512×512
 fixtures/
 └── plantes.json             # 60 plantes
 config/
@@ -62,6 +82,7 @@ config/
 | `GET /` | Redirige vers `/mois/{mois_courant}` |
 | `GET /mois/{mois}` | Opérations du mois groupées par type de plante |
 | `GET /plante/{nom}` | Opérations d'une plante triées par mois |
+| `GET /offline` | Page offline PWA |
 
 ### Docker
 
@@ -81,3 +102,4 @@ Credentials MongoDB : `jardin` / `jardin` (configurés dans `docker-compose.yml`
 - Templates Twig : navigation par `onchange` + `window.location` (rechargement de page, pas de SPA)
 - Structure des données plante : `{ nom: string, type: string, entretien: [{ operation: string, mois: int, details: string }] }`
 - Les mois sont indexés à partir de 1 (janvier = 1)
+- Déploiement : `make deploy` (sans `--build` sauf si le Dockerfile a changé)
