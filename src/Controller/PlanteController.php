@@ -24,6 +24,12 @@ class PlanteController extends AbstractController
         return $this->redirectToRoute('app_mois', ['mois' => (int) date('n')]);
     }
 
+    #[Route('/offline', name: 'app_offline')]
+    public function offline(): Response
+    {
+        return $this->render('offline.html.twig');
+    }
+
     #[Route('/mois/{mois}', name: 'app_mois', requirements: ['mois' => '1[0-2]?|[2-9]'])]
     public function mois(int $mois, DocumentManager $dm): Response
     {
