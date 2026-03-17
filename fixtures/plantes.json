@@ -1493,5 +1493,37 @@
       }
     ],
     "nomEN": "basil"
+  },
+  {
+    "nom": "arbre à perruques",
+    "type": "arbuste ornemental",
+    "entretien": [
+      {
+        "operation": "plantation",
+        "mois": 3,
+        "details": "Planter au printemps ou en automne, sol bien drainé, exposition ensoleillée. Espacer de 3-4 m."
+      },
+      {
+        "operation": "taille",
+        "mois": 3,
+        "details": "Tailler légèrement pour aérer la silhouette. Éviter les tailles sévères qui suppriment les floraisons."
+      },
+      {
+        "operation": "floraison",
+        "mois": 6,
+        "details": "Profiter des panaches plumeaux rose-violet très décoratifs de juin à août."
+      },
+      {
+        "operation": "arrosage",
+        "mois": 7,
+        "details": "Arroser modérément en cas de sécheresse prolongée. Très résistant une fois établi."
+      },
+      {
+        "operation": "engrais",
+        "mois": 4,
+        "details": "Apport léger d'engrais universel au printemps. Un sol trop riche favorise le feuillage au détriment des fleurs."
+      }
+    ],
+    "nomEN": "smoke bush"
   }
 ]
