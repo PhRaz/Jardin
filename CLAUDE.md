@@ -14,7 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 make dev                                                              # Démarre les 4 conteneurs
 docker compose exec php composer install                              # Installe les dépendances PHP
-docker compose exec php php bin/console app:import-plantes            # Importe les 60 plantes dans MongoDB
+docker compose exec -u www-data php php bin/console app:import-plantes  # Importe les 61 plantes dans MongoDB
+docker compose exec -u www-data php php bin/console app:create-admin email@exemple.fr motdepasse  # Crée un admin
 ```
 
 > **Important** : toujours exécuter les commandes `bin/console` avec `-u www-data` pour éviter des problèmes de permissions sur `var/cache/` :
@@ -51,15 +52,23 @@ docker-compose.yml           # Services : php, caddy, mongo, mongo-express
 src/
 ├── Document/
 │   ├── Plante.php           # Document ODM — collection "plantes" (nom, type, entretien[])
-│   └── Entretien.php        # EmbeddedDocument (operation, mois, details)
+│   ├── Entretien.php        # EmbeddedDocument (id UUID, operation, mois, details)
+│   └── User.php             # Document ODM — collection "users" (email, password, roles)
 ├── Command/
-│   └── ImportPlantesCommand.php  # app:import-plantes — charge fixtures/plantes.json
+│   ├── ImportPlantesCommand.php  # app:import-plantes — charge fixtures/plantes.json (génère les UUIDs)
+│   └── CreateAdminCommand.php    # app:create-admin email password [--reset-password]
 ├── Controller/
-│   └── PlanteController.php # Routes : / → /mois/{n}, /mois/{mois}, /plante/{nom}, /offline
+│   ├── PlanteController.php # Routes : / → /mois/{n}, /mois/{mois}, /plante/{nom}, /offline
+│   ├── AdminController.php  # POST /admin/entretien/{id} — édition des détails (ROLE_ADMIN)
+│   └── SecurityController.php   # GET/POST /login, /logout
+├── Security/
+│   └── UserProvider.php     # Charge le User depuis MongoDB par email
 └── Kernel.php
 templates/
-├── base.html.twig           # Layout : Bootstrap 5.3.3, navbar verte, CSS responsive
+├── base.html.twig           # Layout : Bootstrap 5.3.3, navbar verte, modal d'édition admin
 ├── offline.html.twig        # Page affichée hors connexion (PWA)
+├── security/
+│   └── login.html.twig      # Formulaire de connexion
 └── plante/
     ├── mois.html.twig       # Vue par mois : opérations groupées par type
     └── plante.html.twig     # Vue par plante : opérations triées par mois
@@ -68,10 +77,11 @@ public/
 ├── sw.js                    # Service worker (cache offline)
 └── icons/                   # Icônes PWA 192×192 et 512×512
 fixtures/
-└── plantes.json             # 60 plantes
+└── plantes.json             # 61 plantes
 config/
 └── packages/
     ├── doctrine_mongodb.yaml  # Connexion MongoDB ODM
+    ├── security.yaml          # Authentification Symfony Security
     └── twig.yaml              # Configuration Twig
 ```
 
@@ -83,6 +93,9 @@ config/
 | `GET /mois/{mois}` | Opérations du mois groupées par type de plante |
 | `GET /plante/{nom}` | Opérations d'une plante triées par mois |
 | `GET /offline` | Page offline PWA |
+| `GET/POST /login` | Formulaire de connexion |
+| `GET /logout` | Déconnexion |
+| `POST /admin/entretien/{id}` | Mise à jour du champ `details` d'un entretien (ROLE_ADMIN) |
 
 ### Docker
 
@@ -100,6 +113,8 @@ Credentials MongoDB : `jardin` / `jardin` (configurés dans `docker-compose.yml`
 - Language : tout le texte utilisateur et les noms de variables sont en français
 - PHP : attributs natifs PHP 8 pour le mapping ODM (`#[MongoDB\Document]`, `#[MongoDB\Field]`, etc.) et le routing (`#[Route]`)
 - Templates Twig : navigation par `onchange` + `window.location` (rechargement de page, pas de SPA)
-- Structure des données plante : `{ nom: string, type: string, entretien: [{ operation: string, mois: int, details: string }] }`
+- Structure des données plante : `{ nom: string, type: string, entretien: [{ id: uuid, operation: string, mois: int, details: string }] }`
 - Les mois sont indexés à partir de 1 (janvier = 1)
 - Déploiement : `make deploy` (sans `--build` sauf si le Dockerfile a changé)
+- Gestion des admins : `app:create-admin email password` / `app:create-admin email password --reset-password`
+- Après un `app:import-plantes` en prod, les UUIDs des entretiens changent — les modifications de `details` faites via l'UI sont perdues

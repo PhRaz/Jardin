@@ -68,8 +68,11 @@ TREFLE_API_TOKEN=usr-Sjf861s6j1ffaDJETgyrRbFW-1Ub1cjD5OPTGYBX7Lk
 ```bash
 docker compose -f docker-compose.prod.yml --env-file .env.local up -d --build
 docker compose -f docker-compose.prod.yml --env-file .env.local exec php composer install --no-dev --optimize-autoloader
-docker compose -f docker-compose.prod.yml --env-file .env.local exec php php bin/console app:import-plantes
-docker compose -f docker-compose.prod.yml --env-file .env.local exec php php bin/console cache:warmup
+docker compose -f docker-compose.prod.yml --env-file .env.local exec -u www-data php php bin/console app:import-plantes
+docker compose -f docker-compose.prod.yml --env-file .env.local exec -u www-data php php bin/console cache:warmup
+
+# Créer le premier compte administrateur
+docker compose -f docker-compose.prod.yml --env-file .env.local exec -u www-data php php bin/console app:create-admin email@exemple.fr motdepasse
 ```
 
 Le site est accessible sur **`http://IP_DU_SERVEUR`**.
@@ -134,9 +137,8 @@ dc down
 
 # Shell PHP
 dc exec php bash
+
+# Gestion des comptes admin
+dc exec -u www-data php php bin/console app:create-admin email@exemple.fr motdepasse
+dc exec -u www-data php php bin/console app:create-admin email@exemple.fr nouveaumdp --reset-password
 ```
-
-
-## resume session claude
-
-claude --resume f0620050-49a5-48e5-921e-49e1a2586340
