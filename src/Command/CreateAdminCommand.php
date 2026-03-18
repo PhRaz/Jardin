@@ -8,6 +8,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -27,8 +28,10 @@ class CreateAdminCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('email', InputArgument::REQUIRED, 'Email de l\'administrateur');
-        $this->addArgument('password', InputArgument::REQUIRED, 'Mot de passe');
+        $this
+            ->addArgument('email', InputArgument::REQUIRED, 'Email de l\'administrateur')
+            ->addArgument('password', InputArgument::REQUIRED, 'Mot de passe')
+            ->addOption('reset-password', null, InputOption::VALUE_NONE, 'Réinitialise le mot de passe si le compte existe déjà');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -37,11 +40,21 @@ class CreateAdminCommand extends Command
 
         $email = $input->getArgument('email');
         $plainPassword = $input->getArgument('password');
+        $reset = $input->getOption('reset-password');
 
         $existing = $this->dm->getRepository(User::class)->findOneBy(['email' => $email]);
+
         if ($existing) {
-            $io->error("Un utilisateur avec l'email « $email » existe déjà.");
-            return Command::FAILURE;
+            if (!$reset) {
+                $io->error("Un utilisateur avec l'email « $email » existe déjà. Utilisez --reset-password pour changer son mot de passe.");
+                return Command::FAILURE;
+            }
+
+            $existing->setPassword($this->hasher->hashPassword($existing, $plainPassword));
+            $this->dm->flush();
+
+            $io->success("Mot de passe de « $email » mis à jour.");
+            return Command::SUCCESS;
         }
 
         $user = new User();
