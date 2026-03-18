@@ -8,6 +8,9 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 class Entretien
 {
     #[MongoDB\Field(type: 'string')]
+    private string $id;
+
+    #[MongoDB\Field(type: 'string')]
     private string $operation;
 
     #[MongoDB\Field(type: 'int')]
@@ -15,6 +18,17 @@ class Entretien
 
     #[MongoDB\Field(type: 'string')]
     private string $details;
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getOperation(): string
     {

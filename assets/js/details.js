@@ -97,6 +97,66 @@ function construireHtml(nom, plant, {
     return html;
 }
 
+export function initAdminEdit() {
+    const modalEl = document.getElementById('editModal');
+    if (!modalEl) return;
+
+    const modal = new Modal(modalEl);
+    const textarea = document.getElementById('editModalTextarea');
+    const saveBtn = document.getElementById('editModalSave');
+    const errorDiv = document.getElementById('editModalError');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    let currentId = null;
+    let currentSpan = null;
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action="editer-details"]');
+        if (!btn) return;
+
+        currentId = btn.dataset.id;
+        currentSpan = btn.closest('td').querySelector('.details-texte');
+        textarea.value = currentSpan.textContent.trim();
+        errorDiv.classList.add('d-none');
+        modal.show();
+        textarea.focus();
+    });
+
+    saveBtn.addEventListener('click', async () => {
+        if (!currentId) return;
+
+        saveBtn.disabled = true;
+        errorDiv.classList.add('d-none');
+
+        try {
+            const res = await fetch(`/admin/entretien/${currentId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': csrfToken,
+                },
+                body: JSON.stringify({ details: textarea.value }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                errorDiv.textContent = data.error || 'Erreur lors de la sauvegarde';
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+
+            currentSpan.textContent = data.details;
+            modal.hide();
+        } catch {
+            errorDiv.textContent = 'Erreur réseau, veuillez réessayer.';
+            errorDiv.classList.remove('d-none');
+        } finally {
+            saveBtn.disabled = false;
+        }
+    });
+}
+
 export function initMoisDetails() {
     const modalEl = document.getElementById('plantModal');
     if (!modalEl) return;

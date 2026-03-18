@@ -16,12 +16,42 @@
 <nav class="navbar navbar-dark bg-success mb-4">
     <div class="container">
         <a class="navbar-brand mb-0 h1" href="{{ path('app_index') }}" style="text-decoration: none;">Calendrier des plantes</a>
+        <div class="navbar-nav flex-row">
+            {% if is_granted('ROLE_ADMIN') %}
+                <span class="navbar-text me-3 text-white-50 small">{{ app.user.email }}</span>
+                <a class="nav-link text-white" href="{{ path('app_logout') }}">Déconnexion</a>
+            {% else %}
+                <a class="nav-link text-white" href="{{ path('app_login') }}">Connexion</a>
+            {% endif %}
+        </div>
     </div>
 </nav>
 
 <div class="container">
     {% block body %}{% endblock %}
 </div>
+
+{% if is_granted('ROLE_ADMIN') %}
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="editModalLabel">Modifier les détails</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="editModalTextarea" class="form-control" rows="5"></textarea>
+                <div id="editModalError" class="alert alert-danger mt-2 d-none"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success" id="editModalSave">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<meta name="csrf-token" content="{{ csrf_token('edit-details') }}">
+{% endif %}
 
 {{ vite_entry_script_tags('app') }}
 <script>

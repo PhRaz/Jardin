@@ -38,7 +38,15 @@
             <tr>
                 <td><a class="btn-link-nav" href="{{ path('app_mois', {mois: op.mois}) }}">{{ moisLabels[op.mois] }}</a></td>
                 <td>{{ op.operation }}</td>
-                <td class="details">{{ op.details }}</td>
+                <td class="details">
+                    <span class="details-texte">{{ op.details }}</span>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <button class="btn btn-sm btn-link p-0 ms-2 text-secondary"
+                            data-action="editer-details"
+                            data-id="{{ op.id }}"
+                            title="Modifier">✏️</button>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </tbody>

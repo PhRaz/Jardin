@@ -42,6 +42,7 @@ class PlanteController extends AbstractController
                 if ($entretien->getMois() === $mois) {
                     $type = $plante->getType();
                     $operationsParType[$type][] = [
+                        'id' => $entretien->getId(),
                         'nom' => $plante->getNom(),
                         'operation' => $entretien->getOperation(),
                         'details' => $entretien->getDetails(),
