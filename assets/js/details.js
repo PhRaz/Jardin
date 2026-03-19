@@ -200,6 +200,7 @@ export function initAdminPhoto() {
                 btnReprendre.classList.add('d-none');
                 errorDiv.classList.add('d-none');
                 photoDataUrl = null;
+                cameraUi.scrollIntoView({ behavior: 'smooth', block: 'start' });
             })
             .catch(err => alert(`Impossible d'accéder à la caméra : ${err.message}`));
     }
