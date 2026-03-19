@@ -29,9 +29,14 @@ class Plante
     #[MongoDB\EmbedMany(targetDocument: Entretien::class)]
     private Collection $entretien;
 
+    /** @var Collection<int, PhotoPlante> */
+    #[MongoDB\EmbedMany(targetDocument: PhotoPlante::class)]
+    private Collection $photos;
+
     public function __construct()
     {
         $this->entretien = new ArrayCollection();
+        $this->photos = new ArrayCollection();
     }
 
     public function getId(): ?string
@@ -87,6 +92,24 @@ class Plante
     public function removeEntretien(Entretien $entretien): self
     {
         $this->entretien->removeElement($entretien);
+        return $this;
+    }
+
+    /** @return Collection<int, PhotoPlante> */
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function addPhoto(PhotoPlante $photo): self
+    {
+        $this->photos->add($photo);
+        return $this;
+    }
+
+    public function removePhoto(PhotoPlante $photo): self
+    {
+        $this->photos->removeElement($photo);
         return $this;
     }
 

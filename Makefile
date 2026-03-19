@@ -33,6 +33,10 @@ shell: ## Ouvre un shell dans le conteneur PHP
 cache-clear: ## Vide le cache Symfony (dev)
 	docker compose exec -u www-data php php bin/console cache:clear
 
+.PHONY: build
+build: ## Génère les assets front (npm run build)
+	npm run build
+
 # ─── Production ───────────────────────────────────────────────────────────────
 
 .PHONY: deploy

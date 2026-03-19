@@ -158,6 +158,135 @@ export function initAdminEdit() {
     });
 }
 
+export function initAdminPhoto() {
+    const cameraSection = document.getElementById('camera-section');
+    if (!cameraSection) return;
+
+    const btnOuvrir = document.getElementById('btn-ouvrir-camera');
+    const cameraUi = document.getElementById('camera-ui');
+    const video = document.getElementById('camera-video');
+    const canvas = document.getElementById('camera-canvas');
+    const preview = document.getElementById('camera-preview');
+    const btnCapturer = document.getElementById('btn-capturer');
+    const btnSauvegarder = document.getElementById('btn-sauvegarder-photo');
+    const btnReprendre = document.getElementById('btn-reprendre');
+    const btnAnnuler = document.getElementById('btn-annuler-camera');
+    const errorDiv = document.getElementById('photo-error');
+    const photosGrid = document.getElementById('photos-grid');
+
+    const nom = cameraSection.dataset.nom;
+    const csrfToken = cameraSection.dataset.csrf;
+
+    let stream = null;
+    let photoDataUrl = null;
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(t => t.stop());
+            stream = null;
+        }
+    }
+
+    function ouvrirCamera() {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            .then(s => {
+                stream = s;
+                video.srcObject = stream;
+                cameraUi.classList.remove('d-none');
+                video.classList.remove('d-none');
+                preview.classList.add('d-none');
+                btnCapturer.classList.remove('d-none');
+                btnSauvegarder.classList.add('d-none');
+                btnReprendre.classList.add('d-none');
+                errorDiv.classList.add('d-none');
+                photoDataUrl = null;
+            })
+            .catch(err => alert(`Impossible d'accéder à la caméra : ${err.message}`));
+    }
+
+    btnOuvrir.addEventListener('click', ouvrirCamera);
+
+    btnCapturer.addEventListener('click', () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        photoDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        preview.src = photoDataUrl;
+        stopCamera();
+        video.classList.add('d-none');
+        preview.classList.remove('d-none');
+        btnCapturer.classList.add('d-none');
+        btnSauvegarder.classList.remove('d-none');
+        btnReprendre.classList.remove('d-none');
+    });
+
+    btnReprendre.addEventListener('click', ouvrirCamera);
+
+    btnAnnuler.addEventListener('click', () => {
+        stopCamera();
+        cameraUi.classList.add('d-none');
+        photoDataUrl = null;
+    });
+
+    btnSauvegarder.addEventListener('click', async () => {
+        if (!photoDataUrl) return;
+
+        btnSauvegarder.disabled = true;
+        errorDiv.classList.add('d-none');
+
+        try {
+            const res = await fetch(`/admin/plante/${encodeURIComponent(nom)}/photo`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+                body: JSON.stringify({ photo: photoDataUrl }),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                errorDiv.textContent = data.error || "Erreur lors de l'enregistrement";
+                errorDiv.classList.remove('d-none');
+                return;
+            }
+
+            window.location.reload();
+        } catch {
+            errorDiv.textContent = 'Erreur réseau, veuillez réessayer.';
+            errorDiv.classList.remove('d-none');
+        } finally {
+            btnSauvegarder.disabled = false;
+        }
+    });
+
+    if (photosGrid) {
+        photosGrid.addEventListener('click', async (e) => {
+            const btn = e.target.closest('[data-action="supprimer-photo"]');
+            if (!btn) return;
+
+            if (!confirm('Supprimer cette photo ?')) return;
+
+            const photoId = btn.dataset.id;
+            const photoNom = btn.dataset.nom;
+
+            try {
+                const res = await fetch(`/admin/plante/${encodeURIComponent(photoNom)}/photo/${photoId}`, {
+                    method: 'DELETE',
+                    headers: { 'X-CSRF-Token': csrfToken },
+                });
+
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    alert(data.error || 'Erreur lors de la suppression');
+                    return;
+                }
+
+                document.getElementById(`photo-${photoId}`)?.remove();
+            } catch {
+                alert('Erreur réseau, veuillez réessayer.');
+            }
+        });
+    }
+}
+
 export function initMoisDetails() {
     const modalEl = document.getElementById('plantModal');
     if (!modalEl) return;
