@@ -116,7 +116,7 @@ export function initAdminEdit() {
 
         currentId = btn.dataset.id;
         currentSpan = btn.closest('td').querySelector('.details-texte');
-        textarea.value = currentSpan.textContent.trim();
+        textarea.value = currentSpan.dataset.details ?? currentSpan.textContent.trim();
         errorDiv.classList.add('d-none');
         modal.show();
         textarea.focus();
@@ -146,7 +146,8 @@ export function initAdminEdit() {
                 return;
             }
 
-            currentSpan.textContent = data.details;
+            currentSpan.dataset.details = data.details;
+            currentSpan.innerHTML = data.details.replace(/\n/g, '<br>');
             modal.hide();
         } catch {
             errorDiv.textContent = 'Erreur réseau, veuillez réessayer.';
