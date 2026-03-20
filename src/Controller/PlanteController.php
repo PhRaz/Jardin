@@ -60,11 +60,19 @@ class PlanteController extends AbstractController
         // Première plante pour le lien "Par plante"
         $premierePlante = $this->getPremierePlante($plantes);
 
+        // Types distincts pour le sélecteur de calendrier
+        $types = [];
+        foreach ($plantes as $p) {
+            $types[$p->getType()] = true;
+        }
+        ksort($types);
+
         return $this->render('plante/mois.html.twig', [
             'moisCourant' => $mois,
             'moisLabels' => self::MOIS_LABELS,
             'operationsParType' => $operationsParType,
             'premierePlante' => $premierePlante,
+            'typesPlantes' => array_keys($types),
         ]);
     }
 

@@ -17,7 +17,58 @@
             {% endfor %}
         </select>
     </div>
+    <div class="col-auto">
+        <label class="form-label fw-bold d-none d-sm-block">&nbsp;</label>
+        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#calendrierModal">
+            📅 Calendrier
+        </button>
+    </div>
 </div>
+
+{# Modal Calendrier #}
+<div class="modal fade" id="calendrierModal" tabindex="-1" aria-labelledby="calendrierModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="calendrierModalLabel">Générer un calendrier</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="cal-type" class="form-label fw-bold">Type de plante</label>
+                    <select id="cal-type" class="form-select">
+                        {% for type in typesPlantes %}
+                            <option value="{{ type }}">{{ type|capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="cal-format" class="form-label fw-bold">Format</label>
+                    <select id="cal-format" class="form-select">
+                        <option value="a4">A4 portrait</option>
+                        <option value="a3">A3 portrait</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" onclick="ouvrirCalendrier('apercu')">🔍 Aperçu</button>
+                <button class="btn btn-success" onclick="ouvrirCalendrier('pdf')">⬇ Télécharger PDF</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function ouvrirCalendrier(mode) {
+    var type = document.getElementById('cal-type').value;
+    var format = document.getElementById('cal-format').value;
+    var url = '/calendrier/' + mode + '?type=' + encodeURIComponent(type) + '&format=' + encodeURIComponent(format);
+    if (mode === 'apercu') {
+        window.open(url, '_blank');
+    } else {
+        window.location = url;
+    }
+}
+</script>
 
 <h2>Opérations pour {{ moisLabels[moisCourant] }}</h2>
 

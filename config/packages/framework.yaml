@@ -8,6 +8,11 @@ framework:
     #esi: true
     #fragments: true
 
+    http_client:
+        scoped_clients:
+            gotenberg.client:
+                base_uri: 'http://gotenberg:3000'
+
 when@test:
     framework:
         test: true

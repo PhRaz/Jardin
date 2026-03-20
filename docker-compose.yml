@@ -32,6 +32,10 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    restart: unless-stopped
+
   mongo-express:
     image: mongo-express
     ports:

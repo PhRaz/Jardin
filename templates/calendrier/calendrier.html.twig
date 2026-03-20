@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Calendrier {{ type|capitalize }}</title>
+<style>
+{% set isA3 = format == 'a3' %}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: {% if mode == 'apercu' %}#888{% else %}white{% endif %};
+    {% if mode == 'apercu' %}
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    {% endif %}
+}
+
+/* Barre d'outils aperçu */
+.toolbar {
+    width: {{ isA3 ? '297mm' : '210mm' }};
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    font-size: 13px;
+}
+.toolbar-titre { font-weight: bold; color: #2d6a4f; font-size: 15px; }
+.toolbar-actions { display: flex; gap: 10px; align-items: center; }
+.btn-toolbar {
+    padding: 6px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+}
+.btn-toolbar-pdf {
+    background: #2d6a4f;
+    color: white;
+    border-color: #2d6a4f;
+    font-weight: bold;
+}
+
+/* Page calendrier */
+.page {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    {% if mode == 'apercu' %}
+    box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+    {% endif %}
+}
+.page-a4 {
+    width: 210mm;
+    height: 297mm;
+    padding: 6mm 7mm;
+}
+.page-a3 {
+    width: 297mm;
+    height: 420mm;
+    padding: 8mm 10mm;
+}
+
+/* En-tête */
+.calendrier-titre {
+    text-align: center;
+    font-weight: bold;
+    color: #1a3d2b;
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+.page-a4 .calendrier-titre { font-size: 9pt; margin-bottom: 3mm; }
+.page-a3 .calendrier-titre { font-size: 12pt; margin-bottom: 5mm; }
+
+/* Grille 3×4 */
+.grille {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    flex: 1;
+    overflow: hidden;
+}
+.page-a4 .grille { gap: 2.5mm; }
+.page-a3 .grille { gap: 3.5mm; }
+
+/* Cellule mois */
+.mois {
+    display: flex;
+    flex-direction: column;
+    border: 0.5px solid #b0c8b8;
+    border-radius: 1.5mm;
+    overflow: hidden;
+    background: #fafff8;
+}
+
+.mois-entete {
+    background: #2d6a4f;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    flex-shrink: 0;
+    letter-spacing: 0.03em;
+}
+.page-a4 .mois-entete { font-size: 7.5pt; padding: 1.2mm 2mm; }
+.page-a3 .mois-entete { font-size: 10pt; padding: 2mm 2mm; }
+
+.mois-corps {
+    flex: 1;
+    overflow: hidden;
+}
+.page-a4 .mois-corps { padding: 1mm 1.5mm; }
+.page-a3 .mois-corps { padding: 1.5mm 2mm; }
+
+/* Entrée d'entretien */
+.entretien {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+    border-radius: 0.8mm;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.page-a4 .entretien { font-size: 6pt; padding: 0.3mm 1.2mm; margin-bottom: 0.4mm; }
+.page-a3 .entretien { font-size: 7.5pt; padding: 0.5mm 1.5mm; margin-bottom: 0.6mm; }
+
+.plante-nom {
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+    max-width: 55%;
+}
+.op-label {
+    color: #444;
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Couleurs par opération */
+.op-semis       { background: #d4edda; color: #155724; }
+.op-plantation  { background: #b7dfb8; color: #0a3622; }
+.op-recolte,
+.op-r-colte     { background: #ffeaa7; color: #7a5200; }
+.op-taille      { background: #cce5ff; color: #004085; }
+.op-engrais     { background: #fff3cd; color: #533f03; }
+.op-arrosage    { background: #d1f2fb; color: #0c5460; }
+.op-bouturage   { background: #e8d5f5; color: #4a1d6b; }
+.op-greffe      { background: #fde8d8; color: #7d3000; }
+.op-default     { background: #e9ecef; color: #343a40; }
+
+.mois-vide {
+    color: #aaa;
+    font-style: italic;
+    text-align: center;
+    display: block;
+}
+.page-a4 .mois-vide { font-size: 6pt; margin-top: 2mm; }
+.page-a3 .mois-vide { font-size: 8pt; margin-top: 3mm; }
+</style>
+</head>
+<body>
+
+{% set opClasses = {
+    'semis':      'op-semis',
+    'plantation': 'op-plantation',
+    'récolte':    'op-recolte',
+    'taille':     'op-taille',
+    'engrais':    'op-engrais',
+    'arrosage':   'op-arrosage',
+    'bouturage':  'op-bouturage',
+    'greffe':     'op-greffe',
+} %}
+
+{% if mode == 'apercu' %}
+<div class="toolbar">
+    <span class="toolbar-titre">Aperçu — Calendrier {{ type|capitalize }} ({{ format|upper }} portrait)</span>
+    <div class="toolbar-actions">
+        {% if format == 'a4' %}
+            <a href="/calendrier/apercu?type={{ type|url_encode }}&format=a3" class="btn-toolbar">Voir en A3</a>
+        {% else %}
+            <a href="/calendrier/apercu?type={{ type|url_encode }}&format=a4" class="btn-toolbar">Voir en A4</a>
+        {% endif %}
+        <a href="/calendrier/pdf?type={{ type|url_encode }}&format={{ format }}" class="btn-toolbar btn-toolbar-pdf">
+            ⬇ Télécharger PDF
+        </a>
+    </div>
+</div>
+{% endif %}
+
+<div class="page page-{{ format }}">
+    <div class="calendrier-titre">Calendrier — {{ type|capitalize }}</div>
+    <div class="grille">
+        {% for num in 1..12 %}
+        <div class="mois">
+            <div class="mois-entete">{{ moisLabels[num] }}</div>
+            <div class="mois-corps">
+                {% set ops = entretiensParMois[num]|default([]) %}
+                {% if ops|length == 0 %}
+                    <span class="mois-vide">—</span>
+                {% else %}
+                    {% for item in ops %}
+                    {% set opKey = item.operation|lower %}
+                    <div class="entretien {{ opClasses[opKey]|default('op-default') }}">
+                        <span class="plante-nom">{{ item.nom }}</span>
+                        <span class="op-label">{{ item.operation }}</span>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+</body>
+</html>

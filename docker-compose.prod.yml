@@ -9,6 +9,7 @@ services:
     working_dir: /var/www/html
     depends_on:
       - mongo
+      - gotenberg
 
   caddy:
     image: caddy:2-alpine
@@ -24,6 +25,10 @@ services:
       - caddy_config:/config
     depends_on:
       - php
+
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    restart: unless-stopped
 
   mongo:
     image: mongo:7
