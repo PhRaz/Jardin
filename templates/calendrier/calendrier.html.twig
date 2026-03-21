@@ -50,6 +50,23 @@ body {
     font-weight: bold;
 }
 
+/* Toolbar mobile : bandeau fixe en haut, pleine largeur */
+@media (max-width: 700px) {
+    body { padding-top: 60px; }
+    .toolbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        width: 100%;
+        border-radius: 0;
+        margin-bottom: 0;
+        z-index: 100;
+        gap: 8px;
+    }
+    .toolbar-titre { display: none; }
+    .toolbar-actions { flex-wrap: wrap; gap: 8px; }
+    .btn-toolbar { font-size: 14px; padding: 8px 12px; }
+}
+
 /* Page calendrier */
 .page {
     background: white;
@@ -79,8 +96,8 @@ body {
     letter-spacing: 0.05em;
     text-transform: uppercase;
 }
-.page-a4 .calendrier-titre { font-size: 9pt; margin-bottom: 3mm; }
-.page-a3 .calendrier-titre { font-size: 12pt; margin-bottom: 5mm; }
+.page-a4 .calendrier-titre { font-size: 11pt; margin-bottom: 3mm; }
+.page-a3 .calendrier-titre { font-size: 14pt; margin-bottom: 5mm; }
 
 /* Grille 3×4 */
 .grille {
@@ -111,8 +128,8 @@ body {
     flex-shrink: 0;
     letter-spacing: 0.03em;
 }
-.page-a4 .mois-entete { font-size: 7.5pt; padding: 1.2mm 2mm; }
-.page-a3 .mois-entete { font-size: 10pt; padding: 2mm 2mm; }
+.page-a4 .mois-entete { font-size: 9.5pt; padding: 1.2mm 2mm; }
+.page-a3 .mois-entete { font-size: 12pt; padding: 2mm 2mm; }
 
 .mois-corps {
     flex: 1;
@@ -130,15 +147,15 @@ body {
     white-space: nowrap;
     overflow: hidden;
 }
-.page-a4 .entretien { font-size: 6pt; padding: 0.3mm 1.2mm; margin-bottom: 0.4mm; }
-.page-a3 .entretien { font-size: 7.5pt; padding: 0.5mm 1.5mm; margin-bottom: 0.6mm; }
+.page-a4 .entretien { font-size: 8pt; padding: 0.3mm 1.2mm; margin-bottom: 0.5mm; }
+.page-a3 .entretien { font-size: 10pt; padding: 0.5mm 1.5mm; margin-bottom: 0.7mm; }
 
 .plante-nom {
     font-weight: bold;
     overflow: hidden;
     text-overflow: ellipsis;
     flex-shrink: 0;
-    max-width: 55%;
+    max-width: 62%;
 }
 .op-label {
     color: #444;
@@ -186,6 +203,7 @@ body {
 <div class="toolbar">
     <span class="toolbar-titre">Aperçu — Calendrier {{ type|capitalize }} ({{ format|upper }} portrait)</span>
     <div class="toolbar-actions">
+        <a href="/" class="btn-toolbar">← Retour</a>
         {% if format == 'a4' %}
             <a href="/calendrier/apercu?type={{ type|url_encode }}&format=a3" class="btn-toolbar">Voir en A3</a>
         {% else %}
