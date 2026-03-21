@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - **Backend** : Symfony 7.4 (PHP 8.3) with MongoDB via Doctrine ODM, Twig pour le rendu server-side, served by Caddy, orchestré avec Docker Compose
 - **PWA** : manifest.json + service worker (`public/sw.js`) pour installation et mode offline
+- **PDF** : génération de calendriers PDF via Gotenberg 8 (bundle `sensiolabs/gotenberg-bundle`)
 
 ## Running
 
@@ -51,15 +52,18 @@ docker/
 docker-compose.yml           # Services : php, caddy, mongo, mongo-express
 src/
 ├── Document/
-│   ├── Plante.php           # Document ODM — collection "plantes" (nom, type, entretien[])
+│   ├── Plante.php           # Document ODM — collection "plantes" (nom, nomEN, type, entretien[], photos[])
 │   ├── Entretien.php        # EmbeddedDocument (id UUID, operation, mois, details)
+│   ├── PhotoPlante.php      # EmbeddedDocument (id UUID, chemin, priseLe) — photos des plantes
+│   ├── TrefleCache.php      # EmbeddedDocument — cache des données botaniques Trefle.io
 │   └── User.php             # Document ODM — collection "users" (email, password, roles)
 ├── Command/
 │   ├── ImportPlantesCommand.php  # app:import-plantes — charge fixtures/plantes.json (génère les UUIDs)
 │   └── CreateAdminCommand.php    # app:create-admin email password [--reset-password]
 ├── Controller/
-│   ├── PlanteController.php # Routes : / → /mois/{n}, /mois/{mois}, /plante/{nom}, /offline
-│   ├── AdminController.php  # POST /admin/entretien/{id} — édition des détails (ROLE_ADMIN)
+│   ├── PlanteController.php      # Routes principales + proxy Trefle.io
+│   ├── AdminController.php       # /admin — édition entretiens, upload/suppression photos (ROLE_ADMIN)
+│   ├── CalendrierController.php  # /calendrier/apercu, /calendrier/pdf — génération PDF par type
 │   └── SecurityController.php   # GET/POST /login, /logout
 ├── Security/
 │   └── UserProvider.php     # Charge le User depuis MongoDB par email
@@ -69,13 +73,16 @@ templates/
 ├── offline.html.twig        # Page affichée hors connexion (PWA)
 ├── security/
 │   └── login.html.twig      # Formulaire de connexion
+├── calendrier/
+│   └── calendrier.html.twig # Grille 12 mois — rendu aperçu HTML et PDF (mode param)
 └── plante/
     ├── mois.html.twig       # Vue par mois : opérations groupées par type
-    └── plante.html.twig     # Vue par plante : opérations triées par mois
+    └── plante.html.twig     # Vue par plante : opérations triées par mois + galerie photos admin
 public/
 ├── manifest.json            # Manifeste PWA
 ├── sw.js                    # Service worker (cache offline)
-└── icons/                   # Icônes PWA 192×192 et 512×512
+├── icons/                   # Icônes PWA 192×192 et 512×512
+└── images/plantes/          # Photos uploadées par les admins (créé automatiquement)
 fixtures/
 └── plantes.json             # 61 plantes
 config/
@@ -91,20 +98,25 @@ config/
 |-------|--------|
 | `GET /` | Redirige vers `/mois/{mois_courant}` |
 | `GET /mois/{mois}` | Opérations du mois groupées par type de plante |
-| `GET /plante/{nom}` | Opérations d'une plante triées par mois |
+| `GET /plante/{nom}` | Opérations d'une plante triées par mois + galerie photos |
 | `GET /offline` | Page offline PWA |
 | `GET/POST /login` | Formulaire de connexion |
 | `GET /logout` | Déconnexion |
 | `POST /admin/entretien/{id}` | Mise à jour du champ `details` d'un entretien (ROLE_ADMIN) |
+| `POST /admin/plante/{nom}/photo` | Upload d'une photo (base64, ROLE_ADMIN) |
+| `DELETE /admin/plante/{nom}/photo/{photoId}` | Suppression d'une photo (ROLE_ADMIN) |
+| `GET /calendrier/apercu?type=&format=` | Aperçu HTML du calendrier annuel par type |
+| `GET /calendrier/pdf?type=&format=` | Téléchargement PDF du calendrier (via Gotenberg) |
 
 ### Docker
 
-| Service        | Image            | Port  | Rôle                        |
-|---------------|------------------|-------|-----------------------------|
-| `php`         | php:8.3-fpm      | 9000  | PHP-FPM + Composer          |
-| `caddy`       | caddy:2-alpine   | 8080  | Serveur web / reverse proxy |
-| `mongo`       | mongo:7          | 27017 | Base de données MongoDB     |
-| `mongo-express`| mongo-express   | 8081  | Interface admin MongoDB     |
+| Service        | Image                    | Port  | Rôle                        |
+|---------------|--------------------------|-------|-----------------------------|
+| `php`         | php:8.3-fpm              | 9000  | PHP-FPM + Composer          |
+| `caddy`       | caddy:2-alpine           | 8080  | Serveur web / reverse proxy |
+| `mongo`       | mongo:7                  | 27017 | Base de données MongoDB     |
+| `mongo-express`| mongo-express           | 8081  | Interface admin MongoDB     |
+| `gotenberg`   | gotenberg/gotenberg:8    | 3000  | Génération PDF via HTML     |
 
 Credentials MongoDB : `jardin` / `jardin` (configurés dans `docker-compose.yml` et `.env`).
 
@@ -113,7 +125,7 @@ Credentials MongoDB : `jardin` / `jardin` (configurés dans `docker-compose.yml`
 - Language : tout le texte utilisateur et les noms de variables sont en français
 - PHP : attributs natifs PHP 8 pour le mapping ODM (`#[MongoDB\Document]`, `#[MongoDB\Field]`, etc.) et le routing (`#[Route]`)
 - Templates Twig : navigation par `onchange` + `window.location` (rechargement de page, pas de SPA)
-- Structure des données plante : `{ nom: string, type: string, entretien: [{ id: uuid, operation: string, mois: int, details: string }] }`
+- Structure des données plante : `{ nom: string, nomEN: string, type: string, entretien: [{ id: uuid, operation: string, mois: int, details: string }], photos: [{ id: uuid, chemin: string, priseLe: date }] }`
 - Les mois sont indexés à partir de 1 (janvier = 1)
 - Déploiement : `make deploy` (sans `--build` sauf si le Dockerfile a changé)
 - Gestion des admins : `app:create-admin email password` / `app:create-admin email password --reset-password`

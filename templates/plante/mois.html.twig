@@ -1,24 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="row mb-3">
-    <div class="col-auto">
-        <label for="view" class="form-label fw-bold">Vue :</label>
-        <select id="view" class="form-select" onchange="if(this.value==='plant') window.location='{{ path('app_plante', {nom: premierePlante}) }}'">
-            <option value="month" selected>Par mois</option>
-            <option value="plant">Par plante</option>
-        </select>
+<div class="d-flex align-items-center gap-3 mb-3">
+    <div class="d-flex flex-column gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <label for="view" class="form-label fw-bold mb-0 text-nowrap">Vue :</label>
+            <select id="view" class="form-select" onchange="if(this.value==='plant') window.location='{{ path('app_plante', {nom: premierePlante}) }}'">
+                <option value="month" selected>Par mois</option>
+                <option value="plant">Par plante</option>
+            </select>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <label for="month" class="form-label fw-bold mb-0 text-nowrap">Mois :</label>
+            <select id="month" class="form-select" onchange="window.location='/mois/'+this.value">
+                {% for i in 1..12 %}
+                    <option value="{{ i }}"{% if i == moisCourant %} selected{% endif %}>{{ moisLabels[i] }}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
-    <div class="col-auto">
-        <label for="month" class="form-label fw-bold">Mois :</label>
-        <select id="month" class="form-select" onchange="window.location='/mois/'+this.value">
-            {% for i in 1..12 %}
-                <option value="{{ i }}"{% if i == moisCourant %} selected{% endif %}>{{ moisLabels[i] }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="col-auto">
-        <label class="form-label fw-bold d-none d-sm-block">&nbsp;</label>
+    <div class="ms-auto flex-shrink-0">
         <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#calendrierModal">
             📅 Calendrier
         </button>

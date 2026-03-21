@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="row mb-3">
-    <div class="col-auto">
-        <label for="view" class="form-label fw-bold">Vue :</label>
+<div class="d-flex flex-column gap-2 mb-3">
+    <div class="d-flex align-items-center gap-2">
+        <label for="view" class="form-label fw-bold mb-0 text-nowrap">Vue :</label>
         <select id="view" class="form-select" onchange="if(this.value==='month') window.location='{{ path('app_mois', {mois: moisCourant}) }}'">
             <option value="month">Par mois</option>
             <option value="plant" selected>Par plante</option>
         </select>
     </div>
-    <div class="col-auto">
-        <label for="plant" class="form-label fw-bold">Plante :</label>
+    <div class="d-flex align-items-center gap-2">
+        <label for="plant" class="form-label fw-bold mb-0 text-nowrap">Plante :</label>
         <select id="plant" class="form-select" onchange="window.location='/plante/'+encodeURIComponent(this.value)">
             {% for type, plantesDuType in plantesParType %}
                 <optgroup label="{{ type|capitalize }}">

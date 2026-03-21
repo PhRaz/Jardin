@@ -18,12 +18,14 @@ td.details { font-size: 0.9em; color: #666; word-wrap: break-word; }
 }
 
 @media (max-width: 767px) {
-    .table-operations { table-layout: auto !important; }
+    .table-operations { display: block !important; width: 100%; }
     .table-operations thead { display: none; }
+    .table-operations tbody { display: block; width: 100%; }
     .table-operations tbody tr {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
+        width: 100%;
         border-bottom: 1px solid #dee2e6;
         padding: 0.5rem 0;
     }
