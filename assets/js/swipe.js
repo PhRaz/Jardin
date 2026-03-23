@@ -3,7 +3,7 @@ export function initSwipeMois() {
     if (!moisEl) return;
 
     const mois    = parseInt(moisEl.value, 10);
-    const content = document.querySelector('.container');
+    const content = document.body;
     const hintPrev = document.getElementById('swipe-hint-prev');
     const hintNext = document.getElementById('swipe-hint-next');
 

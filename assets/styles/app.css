@@ -1,6 +1,7 @@
 td.details { font-size: 0.9em; color: #666; word-wrap: break-word; }
 
 /* ── Swipe navigation mois ── */
+html { overflow-x: hidden; }
 @keyframes swipeOutLeft  { to { transform: translateX(-100%); opacity: 0; } }
 @keyframes swipeOutRight { to { transform: translateX(100%);  opacity: 0; } }
 @keyframes swipeInRight  { from { transform: translateX(100%);  opacity: 0; } to { transform: translateX(0); opacity: 1; } }
