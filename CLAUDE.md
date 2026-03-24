@@ -56,7 +56,11 @@ src/
 │   ├── Entretien.php        # EmbeddedDocument (id UUID, operation, mois, details)
 │   ├── PhotoPlante.php      # EmbeddedDocument (id UUID, chemin, priseLe) — photos des plantes
 │   ├── TrefleCache.php      # EmbeddedDocument — cache des données botaniques Trefle.io
-│   └── User.php             # Document ODM — collection "users" (email, password, roles)
+│   ├── User.php             # Document ODM — collection "users" (email, password, roles)
+│   ├── Potager.php          # Document ODM — collection "potagers" (1 par utilisateur connecté)
+│   ├── JardinPlan.php       # EmbeddedDocument — 1 onglet potager (id UUID, nom, cols, rows)
+│   ├── ZonePlan.php         # EmbeddedDocument — 1 zone (id UUID, nom, type, couleur)
+│   └── CellulePlan.php      # EmbeddedDocument — 1 case peinte (ligne, colonne, zoneId) encodage sparse
 ├── Command/
 │   ├── ImportPlantesCommand.php  # app:import-plantes — charge fixtures/plantes.json (génère les UUIDs)
 │   └── CreateAdminCommand.php    # app:create-admin email password [--reset-password]
@@ -64,17 +68,20 @@ src/
 │   ├── PlanteController.php      # Routes principales + proxy Trefle.io
 │   ├── AdminController.php       # /admin — édition entretiens, upload/suppression photos (ROLE_ADMIN)
 │   ├── CalendrierController.php  # /calendrier/apercu, /calendrier/pdf — génération PDF par type
+│   ├── PotagerController.php     # /potager + /api/potager (GET/PUT) — plan de potager
 │   └── SecurityController.php   # GET/POST /login, /logout
 ├── Security/
 │   └── UserProvider.php     # Charge le User depuis MongoDB par email
 └── Kernel.php
 templates/
-├── base.html.twig           # Layout : Bootstrap 5.3.3, navbar verte, modal d'édition admin
+├── base.html.twig           # Layout : Bootstrap 5.3.3, navbar verte, modal d'édition admin + blocs extra_css/extra_js
 ├── offline.html.twig        # Page affichée hors connexion (PWA)
 ├── security/
 │   └── login.html.twig      # Formulaire de connexion
 ├── calendrier/
 │   └── calendrier.html.twig # Grille 12 mois — rendu aperçu HTML et PDF (mode param)
+├── potager/
+│   └── potager.html.twig    # Plan de potager — canvas Bootstrap, chargement depuis bundle Vite séparé
 └── plante/
     ├── mois.html.twig       # Vue par mois : opérations groupées par type
     └── plante.html.twig     # Vue par plante : opérations triées par mois + galerie photos admin
@@ -107,6 +114,9 @@ config/
 | `DELETE /admin/plante/{nom}/photo/{photoId}` | Suppression d'une photo (ROLE_ADMIN) |
 | `GET /calendrier/apercu?type=&format=` | Aperçu HTML du calendrier annuel par type |
 | `GET /calendrier/pdf?type=&format=` | Téléchargement PDF du calendrier (via Gotenberg) |
+| `GET /potager` | Plan de potager interactif (canvas) |
+| `GET /api/potager` | Charge le plan de l'utilisateur connecté (JSON) |
+| `PUT /api/potager` | Sauvegarde complète du plan (JSON, CSRF token `potager-save`) |
 
 ### Docker
 
@@ -125,6 +135,9 @@ Credentials MongoDB : `jardin` / `jardin` (configurés dans `docker-compose.yml`
 - Language : tout le texte utilisateur et les noms de variables sont en français
 - PHP : attributs natifs PHP 8 pour le mapping ODM (`#[MongoDB\Document]`, `#[MongoDB\Field]`, etc.) et le routing (`#[Route]`)
 - Templates Twig : navigation par `onchange` + `window.location` (rechargement de page, pas de SPA)
+- Potager : bundle Vite séparé (`assets/potager.js`) — ne pas mélanger avec `app.js` ; les templates qui ont besoin d'assets différents utilisent les blocs `{% block extra_css %}` / `{% block extra_js %}` de `base.html.twig`
+- Potager JS (`assets/js/potager.js`) : ES module, délégation d'événements `data-action`, IDs zones = `crypto.randomUUID()`, auto-save debounce 1,5s
+- Potager MongoDB : 1 document `Potager` par utilisateur (identifié par email) ; la grille est encodée en sparse (`CellulePlan[]` — uniquement les cases peintes)
 - Structure des données plante : `{ nom: string, nomEN: string, type: string, entretien: [{ id: uuid, operation: string, mois: int, details: string }], photos: [{ id: uuid, chemin: string, priseLe: date }] }`
 - Les mois sont indexés à partir de 1 (janvier = 1)
 - Déploiement : `make deploy` (sans `--build` sauf si le Dockerfile a changé)
