@@ -10,6 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Jardin">
     {{ vite_entry_link_tags('app') }}
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
 
@@ -54,6 +55,7 @@
 {% endif %}
 
 {{ vite_entry_script_tags('app') }}
+{% block extra_js %}{% endblock %}
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

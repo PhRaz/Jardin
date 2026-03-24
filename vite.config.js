@@ -5,7 +5,7 @@ export default defineConfig({
     plugins: [symfonyPlugin()],
     build: {
         rollupOptions: {
-            input: { app: "./assets/app.js" },
+            input: { app: "./assets/app.js", potager: "./assets/potager.js" },
         },
     },
 });

@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block extra_css %}{{ vite_entry_link_tags('potager') }}{% endblock %}
+{% block extra_js %}{{ vite_entry_script_tags('potager') }}{% endblock %}
+
+{% block body %}
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+<meta name="potager-csrf-token" content="{{ csrf_token('potager-save') }}">
+{% endif %}
+
+<div id="potager-app">
+    <div class="d-flex align-items-center mb-2">
+        <h1 class="h3 mb-0 text-success" id="potager-main-title">🌱 Plan du Potager</h1>
+        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div class="alert alert-info ms-3 mb-0 py-1 px-3 small">
+            <a href="{{ path('app_login') }}">Connectez-vous</a> pour sauvegarder votre plan.
+        </div>
+        {% endif %}
+        <div id="potager-save-status" class="ms-auto small text-muted fst-italic"></div>
+    </div>
+    <p class="text-muted small mb-3">1 case = 0,5 m × 0,5 m</p>
+
+    {# Barre d'onglets #}
+    <ul class="nav nav-tabs" id="potager-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link potager-tab-add-btn" type="button"
+                    data-action="open-new-garden" title="Ajouter un potager">＋</button>
+        </li>
+    </ul>
+
+    {# Contenus des onglets #}
+    <div class="tab-content border border-top-0 rounded-bottom" id="potager-tab-contents"></div>
+</div>
+
+{# Modal Bootstrap — Nouveau Potager #}
+<div class="modal fade" id="potagerNewModal" tabindex="-1"
+     aria-labelledby="potagerNewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="potagerNewModalLabel">🌿 Nouveau Potager</h5>
+                <button type="button" class="btn-close btn-close-white"
+                        data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="potager-modal-name" class="form-label fw-bold">Nom du potager</label>
+                    <input type="text" id="potager-modal-name" class="form-control" maxlength="30"
+                           placeholder="ex : Potager principal, Carré sud…">
+                </div>
+                <div class="d-flex gap-2 align-items-end">
+                    <div class="flex-fill">
+                        <label for="potager-modal-cols" class="form-label fw-bold">Largeur (colonnes)</label>
+                        <input type="number" id="potager-modal-cols" class="form-control text-center"
+                               value="20" min="5" max="40">
+                    </div>
+                    <span class="pb-2 fs-5 text-muted">×</span>
+                    <div class="flex-fill">
+                        <label for="potager-modal-rows" class="form-label fw-bold">Hauteur (lignes)</label>
+                        <input type="number" id="potager-modal-rows" class="form-control text-center"
+                               value="20" min="5" max="40">
+                    </div>
+                </div>
+                <p class="text-muted small fst-italic mt-2" id="potager-modal-hint">→ 10,0 m × 10,0 m = 100 m²</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-success" data-action="confirm-new-garden">Créer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Tooltip canvas-following (pas le tooltip Bootstrap) #}
+<div id="potager-tooltip" class="potager-tooltip"></div>
+
+{% endblock %}
