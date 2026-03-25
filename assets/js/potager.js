@@ -297,6 +297,8 @@ function buildTabDOM(garden) {
 
     bindCanvasEvents(garden, canvas);
     drawGarden(garden);
+    updateLegend(garden);
+    renderZoneList(garden);
     updateGardenSizeHint(garden);
 }
 
