@@ -99,6 +99,52 @@ config/
     └── twig.yaml              # Configuration Twig
 ```
 
+### Schéma de la base de données MongoDB
+
+Légende : `[Document]` = collection racine, `(EmbeddedDocument)` = sous-document imbriqué, `──<` = EmbedMany, `──` = EmbedOne, `- - >` = référence logique par valeur (pas de DBRef).
+
+```
+[users]                          [plantes]
+  id: ObjectId                     id: ObjectId
+  email: string (unique, index)    nom: string (index)
+  password: string                 type: string
+  roles: string[]                  nomEN: string?
+        |                          │
+        │ référence logique         ├──(TrefleCache)
+        │ (Potager.proprietaire       cachedAt: date
+        │  = User.email)              imageLocale: string?
+        ▼                             donneesJson: string (JSON)
+[potagers]                         │
+  id: ObjectId                     ├──<(Entretien)
+  proprietaire: string (index)  │    id: uuid
+  creeLe: date                  │    operation: string
+  modifieLe: date               │    mois: int (1–12)
+  │                             │    details: string
+  └──<(JardinPlan)              │
+       id: uuid                 └──<(PhotoPlante)
+       nom: string                   id: uuid
+       cols: int                     chemin: string
+       rows: int                     priseLe: date
+       │
+       ├──<(ZonePlan)
+       │    id: uuid
+       │    nom: string
+       │    type: string
+       │    couleur: string
+       │
+       └──<(CellulePlan)
+            ligne: int
+            colonne: int
+            zoneId: uuid ·····> ZonePlan.id (référence logique)
+```
+
+**Collections MongoDB** : `users`, `plantes`, `potagers`
+
+**Relations clés** :
+- `Potager.proprietaire` → `User.email` (lien logique, pas de DBRef)
+- `CellulePlan.zoneId` → `ZonePlan.id` (lien logique intra-document)
+- Tous les autres liens sont des **embedded documents** (stockés directement dans le document parent)
+
 ### Routes
 
 | Route | Action |
