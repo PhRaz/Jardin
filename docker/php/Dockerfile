@@ -5,12 +5,17 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libzip-dev \
     libssl-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libwebp-dev \
     unzip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Extensions PHP
-RUN docker-php-ext-install \
+# Extensions PHP (gd : vignettes des images de plantes)
+RUN docker-php-ext-configure gd --with-jpeg --with-webp \
+    && docker-php-ext-install \
+    gd \
     intl \
     zip \
     opcache

@@ -15,3 +15,5 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+/public/images/plantes/carre-*/
+/public/images/plantes/reduite-*/

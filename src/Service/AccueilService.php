@@ -15,6 +15,7 @@ class AccueilService
 
     public function __construct(
         private DocumentManager $dm,
+        private VignetteService $vignettes,
     ) {}
 
     public function construire(int $moisCourant, int $graine): AccueilDto
@@ -32,7 +33,7 @@ class AccueilService
             }
             $plantesParType[$plante->getType()][] = [
                 'nom' => $plante->getNom(),
-                'image' => $this->image($plante),
+                'image' => $this->version($this->image($plante), $this->vignettes->carre(...)),
             ];
         }
         ksort($plantesParType);
@@ -58,7 +59,7 @@ class AccueilService
             operationsParMois: $operationsParMois,
             apercuMois: $moisVisite === null ? [] : $this->apercu($plantes, $moisVisite, $suivie),
             planteSuivie: $suivie?->getNom(),
-            imageSuivie: $suivie === null ? null : $this->image($suivie),
+            imageSuivie: $suivie === null ? null : $this->version($this->image($suivie), $this->vignettes->reduite(...)),
             friseSuivie: $friseSuivie,
             moisRebond: $moisRebond,
             operationRebond: $operationRebond,
@@ -190,6 +191,16 @@ class AccueilService
         }
 
         return $operations;
+    }
+
+    /**
+     * Version allégée de l'image, ou l'originale si elle n'a pas pu être générée.
+     *
+     * @param callable(string): ?string $deriver
+     */
+    private function version(?string $image, callable $deriver): ?string
+    {
+        return $image === null ? null : ($deriver($image) ?? $image);
     }
 
     private function image(Plante $plante): ?string
