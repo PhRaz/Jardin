@@ -22,6 +22,10 @@ class Plante
     #[MongoDB\Field(type: 'string', nullable: true)]
     private ?string $nomEN = null;
 
+    /** Binôme latin de l'espèce, prioritaire pour la recherche Trefle.io */
+    #[MongoDB\Field(type: 'string', nullable: true)]
+    private ?string $nomLatin = null;
+
     #[MongoDB\EmbedOne(targetDocument: TrefleCache::class, nullable: true)]
     private ?TrefleCache $trefleCache = null;
 
@@ -75,6 +79,16 @@ class Plante
     {
         $this->nomEN = $nomEN;
         return $this;
+    }
+
+    public function getNomLatin(): ?string
+    {
+        return $this->nomLatin;
+    }
+
+    public function setNomLatin(?string $nomLatin): void
+    {
+        $this->nomLatin = $nomLatin;
     }
 
     /** @return Collection<int, Entretien> */

@@ -24,7 +24,8 @@
         "details": "Engrais riche en potassium et phosphore au pied de l'arbre."
       }
     ],
-    "nomEN": "peach tree"
+    "nomEN": "peach tree",
+    "nomLatin": "Prunus persica"
   },
   {
     "nom": "prunier mirabelle",
@@ -51,7 +52,8 @@
         "details": "Engrais équilibré autour du tronc."
       }
     ],
-    "nomEN": "mirabelle plum"
+    "nomEN": "mirabelle plum",
+    "nomLatin": "Prunus domestica"
   },
   {
     "nom": "prunier prune rouge",
@@ -78,7 +80,8 @@
         "details": "Engrais équilibré autour du tronc."
       }
     ],
-    "nomEN": "red plum tree"
+    "nomEN": "red plum tree",
+    "nomLatin": "Prunus domestica"
   },
   {
     "nom": "prunier reine claude",
@@ -105,7 +108,8 @@
         "details": "Engrais équilibré autour du tronc."
       }
     ],
-    "nomEN": "greengage plum"
+    "nomEN": "greengage plum",
+    "nomLatin": "Prunus domestica"
   },
   {
     "nom": "noisettier",
@@ -132,7 +136,8 @@
         "details": "Engrais organique au pied du plant."
       }
     ],
-    "nomEN": "hazel"
+    "nomEN": "hazel",
+    "nomLatin": "Corylus avellana"
   },
   {
     "nom": "noyer",
@@ -159,7 +164,8 @@
         "details": "Appliquer engrais organique ou compost autour du tronc."
       }
     ],
-    "nomEN": "walnut tree"
+    "nomEN": "walnut tree",
+    "nomLatin": "Juglans regia"
   },
   {
     "nom": "tamaris",
@@ -181,7 +187,8 @@
         "details": "Engrais organique au printemps."
       }
     ],
-    "nomEN": "tamarisk"
+    "nomEN": "tamarisk",
+    "nomLatin": "Tamarix gallica"
   },
   {
     "nom": "fraisier",
@@ -208,7 +215,8 @@
         "details": "Engrais riche en potassium toutes les 3 semaines."
       }
     ],
-    "nomEN": "strawberry"
+    "nomEN": "strawberry",
+    "nomLatin": "Fragaria × ananassa"
   },
   {
     "nom": "framboisier remontant",
@@ -235,7 +243,8 @@
         "details": "Engrais organique ou compost au pied."
       }
     ],
-    "nomEN": "raspberry"
+    "nomEN": "raspberry",
+    "nomLatin": "Rubus idaeus"
   },
   {
     "nom": "groseiller",
@@ -262,7 +271,8 @@
         "details": "Engrais organique au printemps."
       }
     ],
-    "nomEN": "redcurrant"
+    "nomEN": "redcurrant",
+    "nomLatin": "Ribes rubrum"
   },
   {
     "nom": "vigne",
@@ -289,7 +299,8 @@
         "details": "Engrais riche en potassium et phosphore."
       }
     ],
-    "nomEN": "grape vine"
+    "nomEN": "grape vine",
+    "nomLatin": "Vitis vinifera"
   },
   {
     "nom": "rhubarbe",
@@ -311,7 +322,8 @@
         "details": "Engrais organique avant le démarrage."
       }
     ],
-    "nomEN": "rhubarb"
+    "nomEN": "rhubarb",
+    "nomLatin": "Rheum rhabarbarum"
   },
   {
     "nom": "artichaut",
@@ -333,7 +345,8 @@
         "details": "Appliquer engrais riche en potassium."
       }
     ],
-    "nomEN": "artichoke"
+    "nomEN": "artichoke",
+    "nomLatin": "Cynara cardunculus"
   },
   {
     "nom": "oseille",
@@ -355,7 +368,8 @@
         "details": "Engrais organique ou compost au pied."
       }
     ],
-    "nomEN": "sorrel"
+    "nomEN": "sorrel",
+    "nomLatin": "Rumex acetosa"
   },
   {
     "nom": "menthe",
@@ -377,7 +391,8 @@
         "details": "Ajouter compost ou engrais équilibré au printemps."
       }
     ],
-    "nomEN": "mint"
+    "nomEN": "mint",
+    "nomLatin": "Mentha spicata"
   },
   {
     "nom": "thym",
@@ -399,7 +414,8 @@
         "details": "Peu d'engrais nécessaire, un peu de compost suffit."
       }
     ],
-    "nomEN": "thyme"
+    "nomEN": "thyme",
+    "nomLatin": "Thymus vulgaris"
   },
   {
     "nom": "cerisier",
@@ -426,7 +442,8 @@
         "details": "Engrais complet au pied de l'arbre au début du printemps."
       }
     ],
-    "nomEN": "cherry tree"
+    "nomEN": "cherry tree",
+    "nomLatin": "Prunus cerasus"
   },
   {
     "nom": "merisier",
@@ -453,7 +470,8 @@
         "details": "Compost ou engrais organique au pied au printemps."
       }
     ],
-    "nomEN": "wild cherry"
+    "nomEN": "wild cherry",
+    "nomLatin": "Prunus avium"
   },
   {
     "nom": "cognassier",
@@ -480,7 +498,8 @@
         "details": "Engrais organique ou compost au pied au printemps."
       }
     ],
-    "nomEN": "quince"
+    "nomEN": "quince",
+    "nomLatin": "Cydonia oblonga"
   },
   {
     "nom": "romarin",
@@ -507,7 +526,8 @@
         "details": "Peu exigeant, un peu de compost suffit."
       }
     ],
-    "nomEN": "rosemary"
+    "nomEN": "rosemary",
+    "nomLatin": "Salvia rosmarinus"
   },
   {
     "nom": "persil",
@@ -529,7 +549,8 @@
         "details": "Engrais azoté léger pour favoriser le feuillage."
       }
     ],
-    "nomEN": "parsley"
+    "nomEN": "parsley",
+    "nomLatin": "Petroselinum crispum"
   },
   {
     "nom": "coriandre",
@@ -551,7 +572,8 @@
         "details": "Sol ordinaire, peu d'engrais nécessaire."
       }
     ],
-    "nomEN": "coriander"
+    "nomEN": "coriander",
+    "nomLatin": "Coriandrum sativum"
   },
   {
     "nom": "rosier",
@@ -578,7 +600,8 @@
         "details": "Traiter préventivement contre pucerons et maladies fongiques."
       }
     ],
-    "nomEN": "rose"
+    "nomEN": "rose",
+    "nomLatin": "Rosa gallica"
   },
   {
     "nom": "laurier rose",
@@ -605,7 +628,8 @@
         "details": "Protéger du gel avec un voile d'hivernage ou rentrer en pot."
       }
     ],
-    "nomEN": "oleander"
+    "nomEN": "oleander",
+    "nomLatin": "Nerium oleander"
   },
   {
     "nom": "muguet",
@@ -627,7 +651,8 @@
         "details": "Terreau de feuilles ou compost en surface au printemps."
       }
     ],
-    "nomEN": "lily of the valley"
+    "nomEN": "lily of the valley",
+    "nomLatin": "Convallaria majalis"
   },
   {
     "nom": "fusain",
@@ -649,7 +674,8 @@
         "details": "Engrais organique ou compost au pied au printemps."
       }
     ],
-    "nomEN": "euonymus"
+    "nomEN": "euonymus",
+    "nomLatin": "Euonymus japonicus"
   },
   {
     "nom": "oranger du mexique",
@@ -671,7 +697,8 @@
         "details": "Engrais pour arbustes à fleurs au printemps."
       }
     ],
-    "nomEN": "mexican orange"
+    "nomEN": "mexican orange",
+    "nomLatin": "Choisya ternata"
   },
   {
     "nom": "fuchsia",
@@ -698,7 +725,8 @@
         "details": "Pailler le pied ou rentrer en pot hors gel."
       }
     ],
-    "nomEN": "fuchsia"
+    "nomEN": "fuchsia",
+    "nomLatin": "Fuchsia magellanica"
   },
   {
     "nom": "géranium vivace",
@@ -720,7 +748,8 @@
         "details": "Compost en surface au printemps, peu exigeant."
       }
     ],
-    "nomEN": "hardy geranium"
+    "nomEN": "hardy geranium",
+    "nomLatin": "Geranium sanguineum"
   },
   {
     "nom": "arbre à papillon nain",
@@ -752,7 +781,8 @@
         "details": "Supprimer les fleurs fanées régulièrement pour prolonger la floraison et éviter les semis indésirables."
       }
     ],
-    "nomEN": "dwarf butterfly bush"
+    "nomEN": "dwarf butterfly bush",
+    "nomLatin": "Buddleja davidii"
   },
   {
     "nom": "clématite",
@@ -779,7 +809,8 @@
         "details": "Guider les tiges sur le support au fur et à mesure."
       }
     ],
-    "nomEN": "clematis"
+    "nomEN": "clematis",
+    "nomLatin": "Clematis montana"
   },
   {
     "nom": "olivier",
@@ -806,7 +837,8 @@
         "details": "Protéger avec un voile d'hivernage si gelées prévues."
       }
     ],
-    "nomEN": "olive tree"
+    "nomEN": "olive tree",
+    "nomLatin": "Olea europaea"
   },
   {
     "nom": "hortensia",
@@ -828,7 +860,8 @@
         "details": "Engrais pour plantes de terre de bruyère au printemps."
       }
     ],
-    "nomEN": "hydrangea"
+    "nomEN": "hydrangea",
+    "nomLatin": "Hydrangea macrophylla"
   },
   {
     "nom": "sauge arbustive",
@@ -850,7 +883,8 @@
         "details": "Peu exigeante, un apport de compost suffit."
       }
     ],
-    "nomEN": "salvia"
+    "nomEN": "salvia",
+    "nomLatin": "Salvia microphylla"
   },
   {
     "nom": "oeillet d'inde",
@@ -872,7 +906,8 @@
         "details": "Engrais liquide pour plantes fleuries tous les 15 jours."
       }
     ],
-    "nomEN": "marigold"
+    "nomEN": "marigold",
+    "nomLatin": "Tagetes patula"
   },
   {
     "nom": "coquelicot",
@@ -889,7 +924,8 @@
         "details": "Ou semer au printemps, ne pas recouvrir les graines."
       }
     ],
-    "nomEN": "poppy"
+    "nomEN": "poppy",
+    "nomLatin": "Papaver rhoeas"
   },
   {
     "nom": "perce-neige",
@@ -906,7 +942,8 @@
         "details": "Compost léger en surface après la floraison."
       }
     ],
-    "nomEN": "snowdrop"
+    "nomEN": "snowdrop",
+    "nomLatin": "Galanthus nivalis"
   },
   {
     "nom": "lavande",
@@ -928,7 +965,8 @@
         "details": "Couper les épis en début de floraison pour séchage."
       }
     ],
-    "nomEN": "lavender"
+    "nomEN": "lavender",
+    "nomLatin": "Lavandula angustifolia"
   },
   {
     "nom": "camélia",
@@ -955,7 +993,8 @@
         "details": "Pailler le pied pour garder la fraîcheur en été."
       }
     ],
-    "nomEN": "camellia"
+    "nomEN": "camellia",
+    "nomLatin": "Camellia japonica"
   },
   {
     "nom": "pivoines",
@@ -982,7 +1021,8 @@
         "details": "Installer des tuteurs avant la floraison pour soutenir les tiges."
       }
     ],
-    "nomEN": "peony"
+    "nomEN": "peony",
+    "nomLatin": "Paeonia lactiflora"
   },
   {
     "nom": "iris d'Alger",
@@ -1004,7 +1044,8 @@
         "details": "Engrais pauvre en azote pour favoriser la floraison."
       }
     ],
-    "nomEN": "Algerian iris"
+    "nomEN": "Algerian iris",
+    "nomLatin": "Iris unguicularis"
   },
   {
     "nom": "croix de Jérusalem",
@@ -1031,7 +1072,8 @@
         "details": "Compost en surface au printemps."
       }
     ],
-    "nomEN": "Maltese cross"
+    "nomEN": "Maltese cross",
+    "nomLatin": "Silene chalcedonica"
   },
   {
     "nom": "azalée",
@@ -1058,7 +1100,8 @@
         "details": "Pailler avec des écorces de pin pour maintenir l'acidité."
       }
     ],
-    "nomEN": "azalea"
+    "nomEN": "azalea",
+    "nomLatin": "Rhododendron simsii"
   },
   {
     "nom": "chèvrefeuille",
@@ -1085,7 +1128,8 @@
         "details": "Compost au pied au printemps."
       }
     ],
-    "nomEN": "honeysuckle"
+    "nomEN": "honeysuckle",
+    "nomLatin": "Lonicera periclymenum"
   },
   {
     "nom": "giroflée",
@@ -1107,7 +1151,8 @@
         "details": "Engrais pour plantes fleuries au début du printemps."
       }
     ],
-    "nomEN": "wallflower"
+    "nomEN": "wallflower",
+    "nomLatin": "Erysimum cheiri"
   },
   {
     "nom": "pomme de terre",
@@ -1134,7 +1179,8 @@
         "details": "Enfouir du compost bien décomposé avant la plantation."
       }
     ],
-    "nomEN": "potato"
+    "nomEN": "potato",
+    "nomLatin": "Solanum tuberosum"
   },
   {
     "nom": "haricot vert",
@@ -1156,7 +1202,8 @@
         "details": "Sol enrichi au compost à l'automne précédent, peu d'engrais."
       }
     ],
-    "nomEN": "green bean"
+    "nomEN": "green bean",
+    "nomLatin": "Phaseolus vulgaris"
   },
   {
     "nom": "courgette",
@@ -1183,7 +1230,8 @@
         "details": "Engrais riche en potassium tous les 15 jours en été."
       }
     ],
-    "nomEN": "zucchini"
+    "nomEN": "zucchini",
+    "nomLatin": "Cucurbita pepo"
   },
   {
     "nom": "betterave",
@@ -1205,7 +1253,8 @@
         "details": "Sol enrichi au compost, éviter l'excès d'azote."
       }
     ],
-    "nomEN": "beetroot"
+    "nomEN": "beetroot",
+    "nomLatin": "Beta vulgaris"
   },
   {
     "nom": "tomate",
@@ -1237,7 +1286,8 @@
         "details": "Engrais riche en potassium tous les 15 jours."
       }
     ],
-    "nomEN": "tomato"
+    "nomEN": "tomato",
+    "nomLatin": "Solanum lycopersicum"
   },
   {
     "nom": "aubergine",
@@ -1264,7 +1314,8 @@
         "details": "Engrais riche en potassium toutes les 2 semaines."
       }
     ],
-    "nomEN": "eggplant"
+    "nomEN": "eggplant",
+    "nomLatin": "Solanum melongena"
   },
   {
     "nom": "poivron",
@@ -1291,7 +1342,8 @@
         "details": "Engrais riche en potassium toutes les 2 semaines."
       }
     ],
-    "nomEN": "bell pepper"
+    "nomEN": "bell pepper",
+    "nomLatin": "Capsicum annuum"
   },
   {
     "nom": "butternut",
@@ -1318,7 +1370,8 @@
         "details": "Engrais organique ou compost au pied en été."
       }
     ],
-    "nomEN": "butternut squash"
+    "nomEN": "butternut squash",
+    "nomLatin": "Cucurbita moschata"
   },
   {
     "nom": "mâche",
@@ -1340,7 +1393,8 @@
         "details": "Sol ordinaire, peu d'engrais nécessaire."
       }
     ],
-    "nomEN": "corn salad"
+    "nomEN": "corn salad",
+    "nomLatin": "Valerianella locusta"
   },
   {
     "nom": "mesclun",
@@ -1367,7 +1421,8 @@
         "details": "Compost léger en surface avant le semis."
       }
     ],
-    "nomEN": "mesclun"
+    "nomEN": "mesclun",
+    "nomLatin": null
   },
   {
     "nom": "petit pois d'hiver",
@@ -1394,7 +1449,8 @@
         "details": "Sol enrichi au compost, pas d'engrais azoté (légumineuse)."
       }
     ],
-    "nomEN": "winter pea"
+    "nomEN": "winter pea",
+    "nomLatin": "Pisum sativum"
   },
   {
     "nom": "ail",
@@ -1416,7 +1472,8 @@
         "details": "Sol bien drainé, pas d'engrais frais ni fumier."
       }
     ],
-    "nomEN": "garlic"
+    "nomEN": "garlic",
+    "nomLatin": "Allium sativum"
   },
   {
     "nom": "échalote",
@@ -1438,7 +1495,8 @@
         "details": "Sol bien drainé, compost de l'automne précédent suffit."
       }
     ],
-    "nomEN": "shallot"
+    "nomEN": "shallot",
+    "nomLatin": "Allium cepa"
   },
   {
     "nom": "radis",
@@ -1465,7 +1523,8 @@
         "details": "Sol léger et frais, peu d'engrais nécessaire."
       }
     ],
-    "nomEN": "radish"
+    "nomEN": "radish",
+    "nomLatin": "Raphanus sativus"
   },
   {
     "nom": "basilic",
@@ -1492,7 +1551,8 @@
         "details": "Engrais liquide organique tous les 15 jours."
       }
     ],
-    "nomEN": "basil"
+    "nomEN": "basil",
+    "nomLatin": "Ocimum basilicum"
   },
   {
     "nom": "arbre à perruques",
@@ -1524,6 +1584,7 @@
         "details": "Apport léger d'engrais universel au printemps. Un sol trop riche favorise le feuillage au détriment des fleurs."
       }
     ],
-    "nomEN": "smoke bush"
+    "nomEN": "smoke bush",
+    "nomLatin": "Cotinus coggygria"
   }
 ]

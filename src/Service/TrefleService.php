@@ -51,12 +51,9 @@ class TrefleService
             return $plante->getTrefleCache()->getDonnees();
         }
 
-        $recherche = $this->get('/plants/search', ['q' => $plante->getNomEN() ?? $plante->getNom()]);
-        if (empty($recherche['data'])) {
-            throw new TrefleException(sprintf('Aucun résultat pour « %s »', $plante->getNom()), 404);
-        }
-
-        $donnees = $this->get('/species/' . (int) $recherche['data'][0]['id'])['data'] ?? [];
+        $donnees = $this->especeParNomLatin($plante)
+            ?? $this->get('/species/' . $this->rechercherEspece($plante))['data']
+            ?? [];
 
         $imageDistante = $donnees['image_url']
             ?? $donnees['images']['flower'][0]['image_url']
@@ -78,6 +75,57 @@ class TrefleService
         $this->dm->flush();
 
         return $donnees;
+    }
+
+    /**
+     * Accès direct à la fiche de l'espèce par son slug (« Tagetes patula » → tagetes-patula).
+     *
+     * @return array<string, mixed>|null null si Trefle ne connaît pas ce slug
+     *
+     * @throws TrefleException si Trefle refuse l'appel (quota dépassé…)
+     */
+    private function especeParNomLatin(Plante $plante): ?array
+    {
+        $nomLatin = $plante->getNomLatin();
+        $slug = $nomLatin === null ? '' : trim(preg_replace('/[^a-z]+/', '-', strtolower($nomLatin)), '-');
+        if ($slug === '') {
+            return null;
+        }
+
+        try {
+            return $this->get('/species/' . $slug)['data'] ?? null;
+        } catch (TrefleException $e) {
+            if ($e->getCode() === 404) {
+                return null;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Cherche par nom latin, puis anglais, puis français. Pour un nom latin, on préfère le résultat
+     * dont le nom scientifique correspond exactement (la recherche plein texte peut classer d'autres espèces devant).
+     *
+     * @throws TrefleException
+     */
+    private function rechercherEspece(Plante $plante): int
+    {
+        $termes = array_unique(array_filter([$plante->getNomLatin(), $plante->getNomEN(), $plante->getNom()]));
+        foreach ($termes as $terme) {
+            $resultats = $this->get('/plants/search', ['q' => $terme])['data'] ?? [];
+            if ($resultats === []) {
+                continue;
+            }
+            foreach ($resultats as $resultat) {
+                if (strcasecmp($resultat['scientific_name'] ?? '', $terme) === 0) {
+                    return (int) $resultat['id'];
+                }
+            }
+
+            return (int) $resultats[0]['id'];
+        }
+
+        throw new TrefleException(sprintf('Aucun résultat pour « %s »', $plante->getNom()), 404);
     }
 
     /**
@@ -103,7 +151,8 @@ class TrefleService
             throw new TrefleException('Erreur lors de l\'appel à Trefle.io', 502);
         }
         if (!empty($data['error']) || (!isset($data['data']) && isset($data['message']))) {
-            throw new TrefleException('Trefle.io : ' . ($data['message'] ?? 'erreur inconnue'), 502);
+            $introuvable = ($data['code'] ?? '') === 'not_found';
+            throw new TrefleException('Trefle.io : ' . ($data['message'] ?? 'erreur inconnue'), $introuvable ? 404 : 502);
         }
 
         return $data;

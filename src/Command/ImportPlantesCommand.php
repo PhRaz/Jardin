@@ -9,6 +9,7 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -21,6 +22,16 @@ class ImportPlantesCommand extends Command
     public function __construct(private DocumentManager $dm)
     {
         parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this->addOption(
+            'noms-latins',
+            null,
+            InputOption::VALUE_NONE,
+            'Met seulement à jour les noms latins des plantes existantes (sans vider la collection)',
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -39,6 +50,10 @@ class ImportPlantesCommand extends Command
             return Command::FAILURE;
         }
 
+        if ($input->getOption('noms-latins')) {
+            return $this->mettreAJourNomsLatins($data, $io);
+        }
+
         // Vider la collection existante
         $this->dm->getDocumentCollection(Plante::class)->drop();
         $io->info('Collection "plantes" vidée.');
@@ -47,6 +62,7 @@ class ImportPlantesCommand extends Command
             $plante = new Plante();
             $plante->setNom($item['nom']);
             $plante->setNomEN($item['nomEN'] ?? null);
+            $plante->setNomLatin($item['nomLatin'] ?? null);
             $plante->setType($item['type']);
 
             foreach ($item['entretien'] as $e) {
@@ -64,6 +80,37 @@ class ImportPlantesCommand extends Command
         $this->dm->flush();
 
         $io->success(count($data) . ' plantes importées dans MongoDB.');
+
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Les entretiens (et leurs UUID) restent intacts : les détails modifiés depuis l'interface sont conservés.
+     *
+     * @param array<int, array<string, mixed>> $data
+     */
+    private function mettreAJourNomsLatins(array $data, SymfonyStyle $io): int
+    {
+        $depot = $this->dm->getRepository(Plante::class);
+        $misesAJour = 0;
+        $absentes = [];
+        foreach ($data as $item) {
+            $plante = $depot->findOneBy(['nom' => $item['nom']]);
+            if ($plante === null) {
+                $absentes[] = $item['nom'];
+                continue;
+            }
+            if ($plante->getNomLatin() !== ($item['nomLatin'] ?? null)) {
+                $plante->setNomLatin($item['nomLatin'] ?? null);
+                $misesAJour++;
+            }
+        }
+        $this->dm->flush();
+
+        if ($absentes !== []) {
+            $io->warning('Plantes absentes de la base : ' . implode(', ', $absentes));
+        }
+        $io->success($misesAJour . ' nom(s) latin(s) mis à jour.');
 
         return Command::SUCCESS;
     }

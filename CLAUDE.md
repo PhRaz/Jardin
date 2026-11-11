@@ -17,6 +17,8 @@ make dev                                                              # Démarre
 docker compose exec php composer install                              # Installe les dépendances PHP
 docker compose exec -u www-data php php bin/console app:import-plantes  # Importe les 61 plantes dans MongoDB
 docker compose exec -u www-data php php bin/console app:create-admin email@exemple.fr motdepasse  # Crée un admin
+docker compose exec -u www-data php php bin/console app:trefle-precharger         # Images Trefle + vignettes (--force, --plante=)
+docker compose exec -u www-data php php bin/console app:import-plantes --noms-latins  # Met à jour les noms latins sans réimporter
 ```
 
 > **Important** : toujours exécuter les commandes `bin/console` avec `-u www-data` pour éviter des problèmes de permissions sur `var/cache/` :
@@ -52,7 +54,7 @@ docker/
 docker-compose.yml           # Services : php, caddy, mongo, mongo-express
 src/
 ├── Document/
-│   ├── Plante.php           # Document ODM — collection "plantes" (nom, nomEN, type, entretien[], photos[])
+│   ├── Plante.php           # Document ODM — collection "plantes" (nom, nomEN, nomLatin, type, entretien[], photos[])
 │   ├── Entretien.php        # EmbeddedDocument (id UUID, operation, mois, details)
 │   ├── PhotoPlante.php      # EmbeddedDocument (id UUID, chemin, priseLe) — photos des plantes
 │   ├── TrefleCache.php      # EmbeddedDocument — cache des données botaniques Trefle.io
@@ -109,6 +111,7 @@ Légende : `[Document]` = collection racine, `(EmbeddedDocument)` = sous-documen
   email: string (unique, index)    nom: string (index)
   password: string                 type: string
   roles: string[]                  nomEN: string?
+        |                          nomLatin: string?
         |                          │
         │ référence logique         ├──(TrefleCache)
         │ (Potager.proprietaire       cachedAt: date
@@ -184,7 +187,7 @@ Credentials MongoDB : `jardin` / `jardin` (configurés dans `docker-compose.yml`
 - Potager : bundle Vite séparé (`assets/potager.js`) — ne pas mélanger avec `app.js` ; les templates qui ont besoin d'assets différents utilisent les blocs `{% block extra_css %}` / `{% block extra_js %}` de `base.html.twig`
 - Potager JS (`assets/js/potager.js`) : ES module, délégation d'événements `data-action`, IDs zones = `crypto.randomUUID()`, auto-save debounce 1,5s
 - Potager MongoDB : 1 document `Potager` par utilisateur (identifié par email) ; la grille est encodée en sparse (`CellulePlan[]` — uniquement les cases peintes)
-- Structure des données plante : `{ nom: string, nomEN: string, type: string, entretien: [{ id: uuid, operation: string, mois: int, details: string }], photos: [{ id: uuid, chemin: string, priseLe: date }] }`
+- Structure des données plante : `{ nom: string, nomEN: string, nomLatin: string?, type: string, entretien: [{ id: uuid, operation: string, mois: int, details: string }], photos: [{ id: uuid, chemin: string, priseLe: date }] }`
 - Les mois sont indexés à partir de 1 (janvier = 1)
 - Déploiement : `make deploy` (sans `--build` sauf si le Dockerfile a changé)
 - Gestion des admins : `app:create-admin email password` / `app:create-admin email password --reset-password`

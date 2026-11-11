@@ -54,7 +54,7 @@ class TreflePrechargerCommand extends Command
         }
 
         $lignes = [];
-        $compteurs = ['image' => 0, 'sans image' => 0, 'échec' => 0];
+        $compteurs = ['image' => 0, 'sans image' => 0, 'introuvable' => 0, 'échec' => 0];
         $appelPrecedent = false;
         $io->progressStart(count($plantes));
 
@@ -68,8 +68,9 @@ class TreflePrechargerCommand extends Command
             try {
                 $donnees = $this->trefle->details($plante, $forcer);
             } catch (TrefleException $e) {
-                $lignes[] = [$plante->getNom(), 'échec', $e->getMessage()];
-                $compteurs['échec']++;
+                $statut = $e->getCode() === 404 ? 'introuvable' : 'échec';
+                $lignes[] = [$plante->getNom(), $statut, $e->getMessage()];
+                $compteurs[$statut]++;
                 $io->progressAdvance();
                 continue;
             }
@@ -89,7 +90,7 @@ class TreflePrechargerCommand extends Command
             $lignes[] = [
                 $plante->getNom(),
                 ($appel ? '' : 'cache, ') . $statut,
-                trim(($donnees['scientific_name'] ?? '?') . ' — ' . ($donnees['common_name'] ?? '')),
+                $this->espece($plante, $donnees),
             ];
             $io->progressAdvance();
         }
@@ -97,9 +98,10 @@ class TreflePrechargerCommand extends Command
         $io->progressFinish();
         $io->table(['Plante', 'Résultat', 'Espèce retenue par Trefle (à vérifier)'], $lignes);
         $bilan = sprintf(
-            '%d avec image, %d sans image, %d échec(s).',
+            '%d avec image, %d sans image, %d introuvable(s) sur Trefle, %d échec(s).',
             $compteurs['image'],
             $compteurs['sans image'],
+            $compteurs['introuvable'],
             $compteurs['échec'],
         );
         $compteurs['échec'] > 0
@@ -107,5 +109,19 @@ class TreflePrechargerCommand extends Command
             : $io->success($bilan);
 
         return $compteurs['échec'] > 0 ? Command::FAILURE : Command::SUCCESS;
+    }
+
+    /**
+     * @param array<string, mixed> $donnees
+     */
+    private function espece(Plante $plante, array $donnees): string
+    {
+        $scientifique = $donnees['scientific_name'] ?? '?';
+        $espece = trim($scientifique . ' — ' . ($donnees['common_name'] ?? ''), ' —');
+        $attendu = $plante->getNomLatin();
+
+        return $attendu !== null && strcasecmp($attendu, $scientifique) !== 0
+            ? $espece . ' (≠ ' . $attendu . ')'
+            : $espece;
     }
 }
