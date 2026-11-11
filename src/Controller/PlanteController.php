@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Document\Plante;
 use App\Document\TrefleCache;
+use App\Service\AccueilService;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,9 +20,22 @@ class PlanteController extends AbstractController
     ];
 
     #[Route('/', name: 'app_index')]
-    public function index(): Response
+    public function index(AccueilService $accueilService): Response
     {
-        return $this->redirectToRoute('app_mois', ['mois' => (int) date('n')]);
+        return $this->render('accueil.html.twig', [
+            'accueil' => $accueilService->construire((int) date('n'), (int) date('z')),
+            'moisLabels' => self::MOIS_LABELS,
+        ]);
+    }
+
+    /**
+     * Point d'entrée de la PWA : rend directement le mois courant, sans redirection
+     * (une réponse redirigée mise en cache ne peut pas servir une navigation hors ligne).
+     */
+    #[Route('/aujourdhui', name: 'app_aujourdhui')]
+    public function aujourdhui(DocumentManager $dm): Response
+    {
+        return $this->mois((int) date('n'), $dm);
     }
 
     #[Route('/offline', name: 'app_offline')]

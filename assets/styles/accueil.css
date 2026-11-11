@@ -1,0 +1,310 @@
+/* ── Landing « Le chemin du jardin » ── */
+.accueil {
+    --vert: #198754;
+    --vert-fonce: #0f5132;
+    --vert-pale: #d1e7dd;
+    --vert-moyen: #a3cfbb;
+    --gris-ligne: #dee2e6;
+    --gris-fond: #e9ecef;
+    --texte-doux: #495057;
+}
+.accueil-intro,
+.chemin { max-width: 46rem; }
+.etape-texte,
+.etape > .apercu,
+.etape > .btn,
+.etape > .mois-nav { max-width: 38rem; }
+@media (min-width: 992px) {
+    .chemin { max-width: 64rem; }
+    .suivie--photo {
+        display: grid;
+        grid-template-columns: minmax(0, 26rem) minmax(0, 1fr);
+        gap: 2rem;
+        align-items: start;
+    }
+    .suivie--photo .suivie-photo { margin-top: 0.25rem; }
+}
+.accueil ::selection { background: var(--vert-pale); color: var(--vert-fonce); }
+.accueil a:focus-visible,
+.accueil button:focus-visible,
+.accueil select:focus-visible {
+    outline: 3px solid var(--vert);
+    outline-offset: 2px;
+    box-shadow: none;
+}
+
+.accueil h1 {
+    font-size: clamp(1.85rem, 1.2rem + 3vw, 2.75rem);
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    margin-bottom: 0.75rem;
+}
+.accueil-intro p {
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--texte-doux);
+    max-width: 38rem;
+    margin-bottom: 0;
+}
+.accueil h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-wrap: balance;
+    margin-bottom: 0.5rem;
+}
+
+/* Le chemin : un tracé pointillé relie les étapes, et se remplit de vert au défilement */
+.chemin {
+    list-style: none;
+    position: relative;
+    margin: 2rem 0 0;
+    padding: 0 0 0 2.25rem;
+}
+.chemin::before,
+.chemin::after {
+    content: "";
+    position: absolute;
+    left: 0.6875rem;
+    top: 0.75rem;
+    bottom: 1rem;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, var(--vert) 0 6px, transparent 6px 12px);
+}
+.chemin::after { display: none; }
+.etape {
+    position: relative;
+    padding-bottom: 2.75rem;
+}
+.etape:last-child { padding-bottom: 0; }
+.etape::before {
+    content: "";
+    position: absolute;
+    left: -2.25rem;
+    top: 0.3rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid var(--vert);
+    box-shadow: 0 0 0 4px #fff;
+}
+.etape:first-child::before { background: var(--vert); }
+.etape-texte {
+    color: var(--texte-doux);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .chemin::before {
+            background: repeating-linear-gradient(to bottom, var(--vert-moyen) 0 6px, transparent 6px 12px);
+        }
+        .chemin::after {
+            display: block;
+            animation: chemin-remplir linear both;
+            animation-timeline: view();
+            animation-range: entry 10% exit 40%;
+        }
+    }
+}
+@keyframes chemin-remplir {
+    from { clip-path: inset(0 0 96% 0); }
+    to   { clip-path: inset(0 0 0 0); }
+}
+
+/* Étape 1 : le mois */
+.mois-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0.25rem;
+}
+.mois-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    min-height: 44px;
+    color: var(--vert);
+    text-decoration: none;
+    font-weight: 500;
+}
+.mois-nav a:hover { color: var(--vert-fonce); text-decoration: underline; text-underline-offset: 3px; }
+.mois-nav strong { font-size: 1.125rem; }
+.apercu {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+}
+.apercu li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-bottom: 1px solid var(--gris-ligne);
+}
+.apercu a {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 44px;
+    padding: 0.6rem 0;
+    color: inherit;
+    text-decoration: none;
+    font-size: 1.0625rem;
+}
+.apercu-nom { flex: 1; }
+.apercu .chevron { color: var(--vert); flex: none; }
+.apercu a:hover .apercu-nom { color: var(--vert-fonce); text-decoration: underline; text-underline-offset: 3px; }
+.apercu-suivie { position: relative; }
+.apercu-suivie .apercu-nom::before {
+    content: "";
+    position: absolute;
+    left: -0.9rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-top: -0.25rem;
+    border-radius: 50%;
+    background: var(--vert);
+}
+.badge-operation {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background: var(--vert-pale);
+    color: var(--vert-fonce);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+    white-space: nowrap;
+}
+
+/* Étape 2 : la plante suivie */
+.suivie-photo {
+    display: block;
+    width: 100%;
+    max-width: 28rem;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0 1rem;
+    box-shadow: 0 2px 10px rgba(15, 81, 50, 0.12);
+}
+.frise {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 0.75rem;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3px;
+}
+.frise-mois {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.75rem;
+    border-radius: 6px;
+    background: var(--gris-fond);
+    color: var(--texte-doux);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+}
+.frise-mois--actif { background: var(--vert); color: #fff; }
+.frise-mois--actif:hover { background: var(--vert-fonce); color: #fff; }
+.frise-mois--ici { outline: 2px solid var(--vert-fonce); outline-offset: 2px; }
+.frise-legende {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem;
+    color: var(--texte-doux);
+    line-height: 1.6;
+}
+.frise-legende strong { color: #212529; margin-right: 0.35rem; }
+
+/* Accès directs */
+.accueil-section {
+    margin-top: 3.5rem;
+}
+.annee {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+.annee-mois {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.6rem 0.7rem;
+    min-height: 44px;
+    border: 1px solid var(--gris-ligne);
+    border-radius: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    font-variant-numeric: tabular-nums;
+}
+.annee-mois span { font-size: 0.8125rem; color: var(--texte-doux); }
+.annee-mois:hover { border-color: var(--vert); }
+.annee-mois--courant { background: var(--vert); border-color: var(--vert); color: #fff; }
+.annee-mois--courant span { color: #fff; }
+.annee-mois--courant:hover { background: var(--vert-fonce); color: #fff; }
+@media (min-width: 576px) { .annee { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 992px) { .annee { grid-template-columns: repeat(6, 1fr); } }
+
+.type-titre {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+}
+.type-titre span { font-weight: 400; color: var(--texte-doux); }
+.plantes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.plantes a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.25rem 0.85rem 0.25rem 0.3rem;
+    border: 1px solid var(--gris-ligne);
+    border-radius: 999px;
+    color: inherit;
+    text-decoration: none;
+}
+.plantes a:hover { border-color: var(--vert); color: var(--vert-fonce); }
+.plante-vignette {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: none;
+}
+.plante-vignette--initiale {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--vert-pale);
+    color: var(--vert-fonce);
+    font-weight: 700;
+    font-size: 0.875rem;
+}
+
+.outils {
+    display: grid;
+    gap: 2rem;
+    margin-top: 0.75rem;
+}
+.outils h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.25rem; }
+.outils p { color: var(--texte-doux); margin-bottom: 0.75rem; }
+@media (min-width: 768px) { .outils { grid-template-columns: 1fr 1fr; } }

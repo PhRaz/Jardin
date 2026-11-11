@@ -25,7 +25,7 @@ Ce n'est pas un référentiel générique : ce sont **les plantes réellement pr
 
 ## Operating Context
 
-- Usage principal dehors, sur téléphone, souvent d'une main. Le mois courant est la vue d'entrée (`/` redirige vers `/mois/{mois courant}`).
+- Usage principal dehors, sur téléphone, souvent d'une main. L'appli installée (PWA) s'ouvre sur le mois courant (`/aujourdhui`, rendu sans redirection) ; `/` est la landing « Le chemin du jardin », qui fait parcourir mois → plante → mois sur le vrai contenu.
 - Navigation entre les mois et vers les fiches plante. Rechargements de page classiques (Twig server-side), pas de SPA.
 - Usages secondaires : dessiner le plan du potager (canevas, onglets, zones colorées), générer le calendrier annuel en PDF par type de plante (aperçu et téléchargement via Gotenberg).
 - Fiche plante : données botaniques complémentaires chargées depuis Trefle.io (recherche par nom anglais).

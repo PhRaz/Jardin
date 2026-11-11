@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% set a = accueil %}
+{% set labelVisite = moisLabels[a.moisVisite] %}
+{% set nbVisite = a.operationsParMois[a.moisVisite] %}
+{% set precedent = (a.moisVisite + 10) % 12 + 1 %}
+{% set suivant = a.moisVisite % 12 + 1 %}
+
+{% macro choses(n) %}{{ n }} {{ n > 1 ? 'choses' : 'chose' }} à faire{% endmacro %}
+{% macro nom(n) %}{{ n|first|upper ~ n|slice(1) }}{% endmacro %}
+{% macro vignette(nom, image, classe) %}
+    {% if image %}
+        <img src="{{ image }}" alt="" class="{{ classe }}" loading="lazy" width="56" height="56">
+    {% else %}
+        <span class="{{ classe }} {{ classe }}--initiale" aria-hidden="true">{{ nom|first|upper }}</span>
+    {% endif %}
+{% endmacro %}
+
+{% block body %}
+<div class="accueil">
+
+    <header class="accueil-intro">
+        <h1>Le calendrier d'entretien d'un vrai jardin</h1>
+        <p>{{ a.nbPlantes }} plantes et {{ a.nbOperations }} opérations d'entretien, réparties sur l'année. Suivez le chemin&nbsp;: un mois, une de ses plantes, puis un autre mois.</p>
+    </header>
+
+    <ol class="chemin">
+        <li class="etape">
+            {% if nbVisite == 0 %}
+                <h2>Rien de prévu cette année</h2>
+            {% elseif a.moisVisite == a.moisCourant %}
+                <h2>{{ labelVisite }}&nbsp;: {{ _self.choses(nbVisite) }}</h2>
+            {% else %}
+                <h2>Rien de prévu en {{ moisLabels[a.moisCourant]|lower }}</h2>
+                <p class="etape-texte">Le travail reprend en {{ labelVisite|lower }}&nbsp;: {{ _self.choses(nbVisite) }}.</p>
+            {% endif %}
+
+            <nav class="mois-nav" aria-label="Changer de mois">
+                <a href="{{ path('app_mois', {mois: precedent}) }}">
+                    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ moisLabels[precedent] }}
+                </a>
+                <strong>{{ labelVisite }}</strong>
+                <a href="{{ path('app_mois', {mois: suivant}) }}">
+                    {{ moisLabels[suivant] }}
+                    <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+            </nav>
+
+            {% if a.apercuMois is not empty %}
+                <ul class="apercu">
+                    {% for ligne in a.apercuMois %}
+                        <li>
+                            <a href="{{ path('app_plante', {nom: ligne.nom}) }}"{% if ligne.nom == a.planteSuivie %} class="apercu-suivie"{% endif %}>
+                                <span class="apercu-nom">{{ _self.nom(ligne.nom) }}</span>
+                                <span class="badge-operation">{{ ligne.operation }}</span>
+                                <svg class="chevron" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="m6 3 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <a class="btn btn-success btn-lg w-100" href="{{ path('app_mois', {mois: a.moisVisite}) }}">Voir tout {{ labelVisite|lower }}</a>
+            {% endif %}
+        </li>
+
+        {% if a.planteSuivie %}
+            <li class="etape">
+                <h2>{{ _self.nom(a.planteSuivie) }}, toute l'année</h2>
+                <div class="suivie{{ a.imageSuivie ? ' suivie--photo' }}">
+                {% if a.imageSuivie %}
+                    <img class="suivie-photo" src="{{ a.imageSuivie }}" alt="{{ _self.nom(a.planteSuivie) }}" loading="lazy">
+                {% endif %}
+                <div class="suivie-corps">
+                <p class="etape-texte">Chaque plante a son calendrier. Touchez un mois en vert pour voir tout ce qu'il y a à faire ce mois-là.</p>
+
+                <ol class="frise" aria-label="Calendrier de {{ a.planteSuivie }}">
+                    {% for m in 1..12 %}
+                        <li>
+                            {% if a.friseSuivie[m] is defined %}
+                                <a href="{{ path('app_mois', {mois: m}) }}"
+                                   class="frise-mois frise-mois--actif{{ m == a.moisVisite ? ' frise-mois--ici' }}"
+                                   aria-label="{{ moisLabels[m] }} : {{ a.friseSuivie[m]|join(', ') }}">{{ moisLabels[m]|first }}</a>
+                            {% else %}
+                                <span class="frise-mois" aria-label="{{ moisLabels[m] }} : rien">{{ moisLabels[m]|first }}</span>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+                <ul class="frise-legende">
+                    {% for m in 1..12 %}
+                        {% if a.friseSuivie[m] is defined %}
+                            <li><strong>{{ moisLabels[m] }}</strong> {{ a.friseSuivie[m]|join(', ') }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+                <a class="btn btn-outline-success w-100" href="{{ path('app_plante', {nom: a.planteSuivie}) }}">Ouvrir la fiche {{ _self.nom(a.planteSuivie) }}</a>
+                </div>
+                </div>
+            </li>
+        {% endif %}
+
+        {% if a.moisRebond %}
+            {% set labelRebond = moisLabels[a.moisRebond] %}
+            <li class="etape">
+                <h2>Puis {{ labelRebond|lower }}, et ainsi de suite</h2>
+                <p class="etape-texte">
+                    {% if a.operationRebond %}
+                        {{ _self.nom(a.planteSuivie) }} en {{ labelRebond|lower }}&nbsp;: {{ a.operationRebond }}.
+                        {% set autres = a.operationsParMois[a.moisRebond] - 1 %}
+                        {% if autres > 0 %}Et {{ autres }} {{ autres > 1 ? 'autres choses' : 'autre chose' }} à faire au jardin.{% endif %}
+                    {% else %}
+                        En {{ labelRebond|lower }}, {{ _self.choses(a.operationsParMois[a.moisRebond]) }} au jardin.
+                    {% endif %}
+                    D'un mois à l'autre, d'une plante à l'autre&nbsp;: tout le site se parcourt ainsi.
+                </p>
+                <a class="btn btn-outline-success w-100" href="{{ path('app_mois', {mois: a.moisRebond}) }}">Aller en {{ labelRebond|lower }}</a>
+            </li>
+        {% endif %}
+    </ol>
+
+    <section class="accueil-section" aria-labelledby="titre-annee">
+        <h2 id="titre-annee">Toute l'année</h2>
+        <ol class="annee">
+            {% for m in 1..12 %}
+                {% set n = a.operationsParMois[m] %}
+                <li>
+                    <a href="{{ path('app_mois', {mois: m}) }}" class="annee-mois{{ m == a.moisCourant ? ' annee-mois--courant' }}"{% if m == a.moisCourant %} aria-current="date"{% endif %}>
+                        <strong>{{ moisLabels[m] }}</strong>
+                        <span>{{ n == 0 ? 'rien de prévu' : n ~ ' à faire' }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ol>
+    </section>
+
+    <section class="accueil-section" aria-labelledby="titre-plantes">
+        <h2 id="titre-plantes">Les {{ a.nbPlantes }} plantes</h2>
+        {% for type, plantes in a.plantesParType %}
+            <h3 class="type-titre">{{ type|capitalize }} <span>{{ plantes|length }}</span></h3>
+            <ul class="plantes">
+                {% for p in plantes %}
+                    <li>
+                        <a href="{{ path('app_plante', {nom: p.nom}) }}">
+                            {{ _self.vignette(p.nom, p.image, 'plante-vignette') }}
+                            {{ _self.nom(p.nom) }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </section>
+
+    <section class="accueil-section accueil-outils" aria-labelledby="titre-outils">
+        <h2 id="titre-outils">Pour aller plus loin</h2>
+        <div class="outils">
+            <div>
+                <h3>Le plan du potager</h3>
+                <p>Dessinez vos carrés et vos zones de culture.</p>
+                <a href="{{ path('app_potager') }}" class="btn btn-outline-success">Ouvrir le potager</a>
+            </div>
+            <form action="{{ path('app_calendrier_apercu') }}" method="get">
+                <h3>Le calendrier à imprimer</h3>
+                <p>Les douze mois sur une page, par type de plante.</p>
+                <div class="d-flex gap-2">
+                    <label class="visually-hidden" for="outil-type">Type de plante</label>
+                    <select id="outil-type" name="type" class="form-select">
+                        {% for type in a.plantesParType|keys %}
+                            <option value="{{ type }}">{{ type|capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="format" value="a4">
+                    <button type="submit" class="btn btn-outline-success text-nowrap">Aperçu</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+</div>
+{% endblock %}

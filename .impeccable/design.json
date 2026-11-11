@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-11T00:00:00Z",
+  "title": "Design System: Calendrier des plantes",
+  "extensions": {
+    "colorMeta": {
+      "vert":         { "role": "primary", "displayName": "Vert jardin", "canonical": "#198754", "tonalRamp": ["#051b11", "#0a3622", "#0f5132", "#146c43", "#198754", "#75b798", "#a3cfbb", "#d1e7dd"] },
+      "vert-survol":  { "role": "primary", "displayName": "Vert de survol", "canonical": "#157347", "tonalRamp": ["#051b11", "#0a3622", "#0f5132", "#157347", "#198754", "#75b798", "#a3cfbb", "#d1e7dd"] },
+      "vert-fonce":   { "role": "primary", "displayName": "Vert sous-bois", "canonical": "#0f5132", "tonalRamp": ["#051b11", "#0a3622", "#0f5132", "#146c43", "#198754", "#75b798", "#a3cfbb", "#d1e7dd"] },
+      "vert-moyen":   { "role": "primary", "displayName": "Vert tendre", "canonical": "#a3cfbb", "tonalRamp": ["#051b11", "#0a3622", "#0f5132", "#146c43", "#198754", "#75b798", "#a3cfbb", "#d1e7dd"] },
+      "vert-pale":    { "role": "primary", "displayName": "Vert pousse", "canonical": "#d1e7dd", "tonalRamp": ["#051b11", "#0a3622", "#0f5132", "#146c43", "#198754", "#75b798", "#a3cfbb", "#d1e7dd"] },
+      "encre":        { "role": "neutral", "displayName": "Encre", "canonical": "#212529", "tonalRamp": ["#212529", "#343a40", "#495057", "#6c757d", "#adb5bd", "#dee2e6", "#e9ecef", "#f8f9fa"] },
+      "texte-doux":   { "role": "neutral", "displayName": "Texte doux", "canonical": "#495057", "tonalRamp": ["#212529", "#343a40", "#495057", "#6c757d", "#adb5bd", "#dee2e6", "#e9ecef", "#f8f9fa"] },
+      "texte-muet":   { "role": "neutral", "displayName": "Texte muet", "canonical": "#6c757d", "tonalRamp": ["#212529", "#343a40", "#495057", "#6c757d", "#adb5bd", "#dee2e6", "#e9ecef", "#f8f9fa"] },
+      "gris-ligne":   { "role": "neutral", "displayName": "Ligne grise", "canonical": "#dee2e6", "tonalRamp": ["#212529", "#343a40", "#495057", "#6c757d", "#adb5bd", "#dee2e6", "#e9ecef", "#f8f9fa"] },
+      "gris-fond":    { "role": "neutral", "displayName": "Fond gris", "canonical": "#e9ecef", "tonalRamp": ["#212529", "#343a40", "#495057", "#6c757d", "#adb5bd", "#dee2e6", "#e9ecef", "#f8f9fa"] },
+      "fond":         { "role": "neutral", "displayName": "Blanc", "canonical": "#ffffff", "tonalRamp": ["#212529", "#343a40", "#495057", "#6c757d", "#adb5bd", "#dee2e6", "#f8f9fa", "#ffffff"] },
+      "vert-imprime": { "role": "tertiary", "displayName": "Vert forêt d'imprimé", "canonical": "#2d6a4f", "tonalRamp": ["#0e2219", "#1a3d2b", "#24533d", "#2d6a4f", "#4f8a6d", "#80b09a", "#b0c8b8", "#fafff8"] }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display", "purpose": "Titre h1 de la landing uniquement." },
+      "headline": { "displayName": "Headline", "purpose": "Titre de page des vues mois, plante et connexion (h2 Bootstrap)." },
+      "title":    { "displayName": "Title", "purpose": "Titres de groupe par type de plante, en-têtes de modale (h5 Bootstrap)." },
+      "body":     { "displayName": "Body", "purpose": "Texte courant." },
+      "small":    { "displayName": "Small", "purpose": "Liens de navigation en tableau, dates, aides." },
+      "label":    { "displayName": "Label", "purpose": "Badges d'opération et compteurs des tuiles de mois." },
+      "imprime":  { "displayName": "Impression", "purpose": "Calendrier PDF (8pt en A4, 10pt en A3)." }
+    },
+    "shadows": [
+      { "name": "photo-galerie", "value": "0 .125rem .25rem rgba(0,0,0,.075)", "purpose": "Vignettes de la galerie photo d'une plante (shadow-sm)." },
+      { "name": "photo-suivie", "value": "0 2px 10px rgba(15, 81, 50, 0.12)", "purpose": "Grande photo de la plante suivie sur la landing." }
+    ],
+    "motion": [
+      { "name": "swipe-mois", "value": "250ms ease", "purpose": "Glissement horizontal entre deux mois sur la vue mois." },
+      { "name": "etat-rapide", "value": "0.15s", "purpose": "Transitions de couleur, bordure et échelle dans le potager." },
+      { "name": "chemin-remplir", "value": "animation-timeline: view(); animation-range: entry 10% exit 40%", "purpose": "Remplissage du tracé du chemin au défilement, landing seulement, coupé en prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "576px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "992px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Bouton principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Seule action pleine d'un écran ou d'une modale.",
+      "html": "<button class=\"ds-btn-primary\">Enregistrer</button>",
+      "css": ".ds-btn-primary { background: #198754; color: #fff; border: 1px solid #198754; padding: 0.375rem 0.75rem; border-radius: 0.375rem; font: 400 1rem/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; transition: background-color .15s ease-in-out, border-color .15s ease-in-out; } .ds-btn-primary:hover { background: #157347; border-color: #146c43; } .ds-btn-primary:focus-visible { outline: 3px solid #198754; outline-offset: 2px; }"
+    },
+    {
+      "name": "Bouton secondaire",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Bouton courant : contour vert, rempli au survol.",
+      "html": "<button class=\"ds-btn-outline\">Détails</button>",
+      "css": ".ds-btn-outline { background: #fff; color: #198754; border: 1px solid #198754; padding: 0.375rem 0.75rem; border-radius: 0.375rem; font: 400 1rem/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; cursor: pointer; transition: background-color .15s ease-in-out, color .15s ease-in-out; } .ds-btn-outline:hover { background: #198754; color: #fff; } .ds-btn-outline:focus-visible { outline: 3px solid #198754; outline-offset: 2px; }"
+    },
+    {
+      "name": "Barre de navigation",
+      "kind": "nav",
+      "refersTo": "navbar",
+      "description": "Barre verte pleine largeur, nom du site à gauche, connexion à droite.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\">Calendrier des plantes</a><a class=\"ds-nav-link\" href=\"#\">Connexion</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; background: #198754; padding: 0.5rem 1rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; } .ds-nav-brand { color: #fff; font-size: 1.25rem; text-decoration: none; } .ds-nav-link { color: #fff; text-decoration: none; padding: 0.5rem 0; } .ds-nav-link:hover { color: rgba(255,255,255,.75); } .ds-nav a:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }"
+    },
+    {
+      "name": "Badge d'opération",
+      "kind": "chip",
+      "refersTo": "badge-operation",
+      "description": "Pilule vert pâle qui nomme l'opération d'entretien.",
+      "html": "<span class=\"ds-badge\">Taille</span>",
+      "css": ".ds-badge { display: inline-block; background: #d1e7dd; color: #0f5132; border-radius: 999px; padding: 0.2rem 0.65rem; font: 500 0.8125rem/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; white-space: nowrap; }"
+    },
+    {
+      "name": "Pastille de plante",
+      "kind": "chip",
+      "refersTo": "chip-plante",
+      "description": "Lien vers une fiche : vignette ronde (photo ou initiale) et nom.",
+      "html": "<a class=\"ds-chip\" href=\"#\"><span class=\"ds-chip-initiale\" aria-hidden=\"true\">R</span>Rosier</a>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0.25rem 0.85rem 0.25rem 0.3rem; border: 1px solid #dee2e6; border-radius: 999px; color: #212529; text-decoration: none; font: 400 1rem/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; transition: border-color .15s, color .15s; } .ds-chip:hover { border-color: #198754; color: #0f5132; } .ds-chip:focus-visible { outline: 3px solid #198754; outline-offset: 2px; } .ds-chip-initiale { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 50%; background: #d1e7dd; color: #0f5132; font-weight: 700; font-size: 0.875rem; }"
+    },
+    {
+      "name": "Tuile de mois",
+      "kind": "card",
+      "refersTo": "tuile-mois",
+      "description": "Accès direct à un mois avec son compteur ; le mois courant est plein vert.",
+      "html": "<div class=\"ds-tuiles\"><a class=\"ds-tuile\" href=\"#\"><strong>Octobre</strong><span>12 à faire</span></a><a class=\"ds-tuile ds-tuile--courant\" href=\"#\" aria-current=\"date\"><strong>Novembre</strong><span>18 à faire</span></a><a class=\"ds-tuile\" href=\"#\"><strong>Décembre</strong><span>rien de prévu</span></a></div>",
+      "css": ".ds-tuiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; } .ds-tuile { display: flex; flex-direction: column; gap: 0.1rem; padding: 0.6rem 0.7rem; min-height: 44px; border: 1px solid #dee2e6; border-radius: 0.5rem; color: #212529; text-decoration: none; font-variant-numeric: tabular-nums; } .ds-tuile span { font-size: 0.8125rem; color: #495057; } .ds-tuile:hover { border-color: #198754; } .ds-tuile:focus-visible { outline: 3px solid #198754; outline-offset: 2px; } .ds-tuile--courant { background: #198754; border-color: #198754; color: #fff; } .ds-tuile--courant span { color: #fff; } .ds-tuile--courant:hover { background: #0f5132; }"
+    },
+    {
+      "name": "Frise des douze mois",
+      "kind": "custom",
+      "refersTo": "frise-mois",
+      "description": "L'année d'une plante : mois actifs en vert cliquables, mois vides en gris.",
+      "html": "<ol class=\"ds-frise\"><li><span class=\"ds-frise-mois\">J</span></li><li><span class=\"ds-frise-mois\">F</span></li><li><a class=\"ds-frise-mois ds-frise-mois--actif\" href=\"#\">M</a></li><li><a class=\"ds-frise-mois ds-frise-mois--actif\" href=\"#\">A</a></li><li><span class=\"ds-frise-mois\">M</span></li><li><span class=\"ds-frise-mois\">J</span></li><li><span class=\"ds-frise-mois\">J</span></li><li><span class=\"ds-frise-mois\">A</span></li><li><span class=\"ds-frise-mois\">S</span></li><li><span class=\"ds-frise-mois\">O</span></li><li><a class=\"ds-frise-mois ds-frise-mois--actif ds-frise-mois--ici\" href=\"#\">N</a></li><li><span class=\"ds-frise-mois\">D</span></li></ol>",
+      "css": ".ds-frise { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; } .ds-frise-mois { display: flex; align-items: center; justify-content: center; height: 2.75rem; border-radius: 6px; background: #e9ecef; color: #495057; font-size: 0.8125rem; font-weight: 600; text-decoration: none; } .ds-frise-mois--actif { background: #198754; color: #fff; } .ds-frise-mois--actif:hover { background: #0f5132; } .ds-frise-mois--actif:focus-visible { outline: 3px solid #198754; outline-offset: 2px; } .ds-frise-mois--ici { outline: 2px solid #0f5132; outline-offset: 2px; }"
+    },
+    {
+      "name": "Sélecteur",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Champ Bootstrap à libellé gras, utilisé pour la vue, le mois, la plante, le type.",
+      "html": "<label class=\"ds-field\"><span>Mois :</span><select class=\"ds-select\"><option>Novembre</option></select></label>",
+      "css": ".ds-field { display: flex; align-items: center; gap: 0.5rem; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; } .ds-field span { font-weight: 700; white-space: nowrap; } .ds-select { flex: 1; padding: 0.375rem 0.75rem; font-size: 1rem; line-height: 1.5; color: #212529; background: #fff; border: 1px solid #dee2e6; border-radius: 0.375rem; } .ds-select:focus-visible { outline: 3px solid #198754; outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Le carnet vert du jardinier",
+    "overview": "Un outil de consultation sobre, construit sur Bootstrap 5.3.3 presque nu : fond blanc, texte encre, un seul vert (#198754 et sa gamme) qui porte la barre de navigation, les actions et tout ce qui « est à faire ». Rien de décoratif ne s'interpose entre la question « quoi faire ce mois-ci ? » et sa réponse. La densité est celle d'un carnet : listes, tableaux, badges, peu d'images en dehors des photos du jardinier lui-même.\n\nLe vert est un signal plus qu'une ambiance. Il marque l'action principale, le mois courant, les mois où une plante a quelque chose à faire, et l'opération elle-même (badge vert pâle). Le gris sert à tout le reste. L'interface se lit d'une main au téléphone : cibles de 44px minimum sur les surfaces récentes, navigation par rechargement de page, pas d'effets.\n\nLe calendrier imprimable (PDF via Gotenberg) est un sous-monde à part : Arial, vert forêt plus sombre, une couleur pâle par opération, tailles en points et en millimètres. Il partage l'esprit (un vert, du blanc, de la sobriété) mais pas les tokens d'écran.",
+    "keyCharacteristics": [
+      "Bootstrap 5.3.3 comme socle, personnalisé par petites feuilles (`app.css`, `accueil.css`, `potager.css`), sans thème Sass.",
+      "Un seul accent : la gamme verte « success » de Bootstrap.",
+      "Pile de polices système, aucune police web chargée.",
+      "Plat par défaut ; l'ombre n'apparaît que sous les photos et les modales.",
+      "Coins doucement arrondis (0.375rem à 0.5rem), pastilles en pilule pour les badges et les plantes."
+    ],
+    "rules": [
+      { "name": "The Un Seul Vert Rule", "body": "À l'écran, la seule teinte d'accent est la gamme verte. Le rouge (`#dc3545`, `btn-danger`) est réservé aux suppressions et aux erreurs ; le bleu `btn-primary` n'a pas sa place (seul cas existant : le bouton « Enregistrer » de la prise de photo, un écart).", "section": "colors" },
+      { "name": "The Vert Veut Dire À Faire Rule", "body": "Un fond vert plein désigne soit l'action principale, soit un mois où il y a quelque chose à faire, soit le mois courant. Un mois vide reste gris.", "section": "colors" },
+      { "name": "The Blanc Seulement Rule", "body": "Le vert #198754 sert de texte uniquement sur blanc (4.53:1). Sur tout fond teinté, le texte vert passe en `vert-fonce` (7.21:1 sur vert pâle).", "section": "colors" },
+      { "name": "The Chiffres Alignés Rule", "body": "Les compteurs empilés en grille (tuiles des douze mois) utilisent `font-variant-numeric: tabular-nums`.", "section": "typography" },
+      { "name": "The Plat Par Défaut Rule", "body": "Tuiles, pastilles, listes et tableaux n'ont pas d'ombre ; l'état se lit par la bordure ou le fond qui passe au vert.", "section": "elevation" }
+    ],
+    "dos": [
+      "**Do** utiliser `btn-success` pour la seule action principale et `btn-outline-success` pour toutes les autres.",
+      "**Do** passer le texte vert en `vert-fonce` dès qu'il repose sur un fond teinté.",
+      "**Do** donner 44px de hauteur minimum à tout lien ou tuile touchable.",
+      "**Do** marquer les mois actifs et le mois courant en vert plein, les mois vides en gris.",
+      "**Do** dessiner les pictogrammes en SVG inline à trait de 2px en `currentColor`, comme les chevrons de la landing.",
+      "**Do** garder les animations courtes (250ms ou moins) et les couper en `prefers-reduced-motion`.",
+      "**Do** réserver Arial, `vert-imprime` et les couleurs par opération au calendrier imprimable."
+    ],
+    "donts": [
+      "**Don't** introduire une seconde couleur d'accent à l'écran ; le rouge reste réservé à la suppression et aux erreurs.",
+      "**Don't** écrire du texte #198754 sur un fond gris ou teinté (4.3:1 sur #f8f9fa, sous le seuil AA).",
+      "**Don't** ajouter d'ombre aux tuiles, pastilles ou listes.",
+      "**Don't** reprendre le tracé du chemin hors de la landing.",
+      "**Don't** utiliser d'emoji comme icône de bouton ou de titre."
+    ]
+  }
+}

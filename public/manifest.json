@@ -2,7 +2,7 @@
   "name": "Calendrier des plantes",
   "short_name": "Jardin",
   "description": "Calendrier mensuel d'entretien du jardin",
-  "start_url": "/",
+  "start_url": "/aujourdhui",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",

@@ -1,8 +1,9 @@
-const CACHE_NAME = 'jardin-v1';
+const CACHE_NAME = 'jardin-v2';
 
 // Ressources à pré-cacher à l'installation
 const PRECACHE_URLS = [
   '/',
+  '/aujourdhui',
   '/offline'
 ];
 
